@@ -1,0 +1,710 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi perfil | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --fondo: #090d1c;
+            --panel: #141b35;
+            --panel-claro: #202b50;
+            --texto: #f5f3ff;
+            --muted: #a3acc8;
+            --morado: #965cff;
+            --azul: #388bff;
+            --naranja: #ff9d42;
+            --verde: #35d39a;
+            --borde: rgba(255,255,255,.09);
+            --gradiente: linear-gradient(110deg, #965cff, #388bff);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--texto);
+            background:
+                radial-gradient(ellipse at 10% 5%, rgba(150,92,255,.18), transparent 32%),
+                radial-gradient(ellipse at 90% 25%, rgba(56,139,255,.13), transparent 30%),
+                var(--fondo);
+        }
+
+        header {
+            padding: 24px 7%;
+            background: rgba(13,18,39,.82);
+            border-bottom: 1px solid var(--borde);
+            backdrop-filter: blur(16px);
+        }
+
+        .marca {
+            font-family: 'Manrope', sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: -.8px;
+        }
+
+        .marca span {
+            color: var(--naranja);
+        }
+
+        header p {
+            color: var(--muted);
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 1150px;
+            margin: 38px auto;
+            padding: 0 22px;
+        }
+
+        .encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .encabezado h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .encabezado p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .boton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 19px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 12px;
+            background: var(--gradiente);
+            box-shadow: 0 7px 22px rgba(111,80,235,.22);
+            transition: .25s ease;
+            border: 1px solid transparent;
+        }
+
+        .boton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 11px 28px rgba(111,80,235,.35);
+            filter: brightness(1.1);
+        }
+
+        .presentacion {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 34px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 23px;
+            background:
+                radial-gradient(circle at 85% 15%, rgba(255,157,66,.35), transparent 25%),
+                linear-gradient(115deg, #542ca5, #245cba 70%, #263e91);
+            box-shadow: 0 15px 40px rgba(0,0,0,.25);
+        }
+
+        .presentacion::after {
+            content: "✦";
+            position: absolute;
+            right: 45px;
+            bottom: -45px;
+            font-size: 180px;
+            color: rgba(255,255,255,.07);
+            pointer-events: none;
+        }
+
+        .avatar {
+            width: 88px;
+            height: 88px;
+            min-width: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 25px;
+            background: rgba(255,255,255,.19);
+            border: 1px solid rgba(255,255,255,.25);
+            font-family: 'Manrope', sans-serif;
+            font-size: 37px;
+            font-weight: 800;
+            box-shadow: 0 8px 25px rgba(0,0,0,.12);
+        }
+
+        .presentacion h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 7px;
+            overflow-wrap: anywhere;
+        }
+
+        .presentacion p {
+            color: rgba(255,255,255,.85);
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .estado {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 13px;
+        }
+
+        .activo {
+            color: #b8ffe3;
+            background: rgba(22,163,112,.22);
+            border: 1px solid rgba(91,255,190,.25);
+        }
+
+        .inactivo {
+            color: #ffd0d0;
+            background: rgba(220,38,38,.2);
+            border: 1px solid rgba(255,120,120,.25);
+        }
+
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 35px;
+        }
+
+        .estadistica {
+            position: relative;
+            overflow: hidden;
+            padding: 23px;
+            border: 1px solid var(--borde);
+            border-radius: 18px;
+            background: linear-gradient(145deg, #192342, #111a35);
+            transition: .25s ease;
+        }
+
+        .estadistica:hover {
+            transform: translateY(-5px);
+            border-color: rgba(150,92,255,.5);
+            box-shadow: 0 12px 28px rgba(0,0,0,.25);
+        }
+
+        .estadistica::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            right: -35px;
+            top: -35px;
+            border-radius: 50%;
+            background: var(--acento);
+            opacity: .12;
+            filter: blur(2px);
+        }
+
+        .estadistica p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 13px;
+        }
+
+        .estadistica h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 29px;
+            font-weight: 800;
+            color: var(--acento);
+        }
+
+        .estadistica:nth-child(1) { --acento: #a78bfa; }
+        .estadistica:nth-child(2) { --acento: #48a5ff; }
+        .estadistica:nth-child(3) { --acento: #ff9d42; }
+        .estadistica:nth-child(4) { --acento: #42d9a0; }
+
+        .seccion {
+            margin-top: 35px;
+        }
+
+        .titulo-seccion {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 19px;
+        }
+
+        .titulo-seccion .icono {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: rgba(150,92,255,.16);
+            border: 1px solid rgba(150,92,255,.15);
+            font-size: 19px;
+        }
+
+        .titulo-seccion h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .datos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .dato-card {
+            padding: 21px 23px;
+            border: 1px solid var(--borde);
+            border-radius: 16px;
+            background: var(--panel);
+            transition: .2s ease;
+        }
+
+        .dato-card:hover {
+            border-color: rgba(56,139,255,.4);
+            background: var(--panel-claro);
+            transform: translateY(-2px);
+        }
+
+        .dato-card p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 9px;
+        }
+
+        .dato-card h3 {
+            color: #f5f2ff;
+            font-size: 16px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .descripcion-progreso {
+            color: var(--muted);
+            font-size: 13px;
+            margin: -5px 0 19px;
+        }
+
+        .materia-card {
+            padding: 22px;
+            border: 1px solid var(--borde);
+            border-radius: 17px;
+            margin-bottom: 13px;
+            background: var(--panel);
+            transition: .2s ease;
+        }
+
+        .materia-card:hover {
+            border-color: rgba(150,92,255,.4);
+            transform: translateX(3px);
+        }
+
+        .materia-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .materia-info strong {
+            color: #f3f0ff;
+            font-size: 14px;
+        }
+
+        .materia-info span {
+            color: #a78bfa;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .barra-fondo {
+            height: 10px;
+            background: #302d49;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .barra {
+            height: 100%;
+            min-width: 0;
+            background: linear-gradient(90deg, var(--morado), var(--azul), var(--naranja));
+            border-radius: 20px;
+            transition: width .7s ease;
+        }
+
+        .sin-datos {
+            color: #9994b2 !important;
+            font-weight: 500 !important;
+        }
+
+        .mensaje-vacio {
+            padding: 17px 20px;
+            border: 1px dashed rgba(255,255,255,.18);
+            border-radius: 14px;
+            color: var(--muted);
+            background: rgba(255,255,255,.025);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 13px;
+            margin: 35px 0;
+        }
+
+        .boton-secundario {
+            color: #dcd5ff;
+            border: 1px solid rgba(167,139,250,.4);
+            background: rgba(139,92,246,.12);
+            box-shadow: none;
+        }
+
+        .boton-secundario:hover {
+            background: rgba(139,92,246,.23);
+        }
+
+        footer {
+            text-align: center;
+            padding: 27px 18px;
+            color: #85819f;
+            font-size: 12px;
+            border-top: 1px solid var(--borde);
+        }
+
+        @media (max-width: 850px) {
+            .estadisticas {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 21px 6%;
+            }
+
+            main {
+                margin-top: 27px;
+                padding: 0 16px;
+            }
+
+            .encabezado h2 {
+                font-size: 25px;
+            }
+
+            .presentacion {
+                padding: 23px;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .avatar {
+                width: 62px;
+                height: 62px;
+                min-width: 62px;
+                border-radius: 19px;
+                font-size: 26px;
+            }
+
+            .presentacion h2 {
+                font-size: 21px;
+            }
+
+            .estadisticas {
+                gap: 11px;
+            }
+
+            .estadistica {
+                padding: 17px;
+            }
+
+            .estadistica p {
+                font-size: 12px;
+                line-height: 1.4;
+            }
+
+            .estadistica h3 {
+                font-size: 24px;
+            }
+
+            .datos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .acciones {
+                flex-direction: column;
+            }
+
+            .acciones .boton {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 370px) {
+            .estadisticas {
+                grid-template-columns: 1fr;
+            }
+
+            .presentacion {
+                flex-direction: column;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition-duration: .01ms !important;
+                animation-duration: .01ms !important;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+</head>
+
+<body>
+
+<header>
+    <div class="marca">EduNivel <span>2.0</span></div>
+    <p>Mi perfil académico</p>
+</header>
+
+<main>
+
+    <section class="encabezado">
+        <div>
+            <h2>Mi perfil</h2>
+            <p>Consulta tu información personal y tu progreso académico.</p>
+        </div>
+
+        <a th:href="@{/estudiante}" class="boton">
+            ← Volver al panel
+        </a>
+    </section>
+
+    <!-- PRESENTACIÓN DEL ESTUDIANTE -->
+    <section class="presentacion">
+
+        <div class="avatar">
+            <span th:text="${#strings.substring(usuario.nombreUsuario, 0, 1).toUpperCase()}">E</span>
+        </div>
+
+        <div>
+            <h2 th:text="${usuario.nombreUsuario}">Estudiante</h2>
+
+            <p>
+                Cuenta de estudiante ·
+                <span th:text="${usuario.rol}">ESTUDIANTE</span>
+            </p>
+
+            <span class="estado activo" th:if="${usuario.activo}">
+                ● Cuenta activa
+            </span>
+
+            <span class="estado inactivo" th:unless="${usuario.activo}">
+                ● Cuenta inactiva
+            </span>
+        </div>
+
+    </section>
+
+    <!-- ESTADÍSTICAS -->
+    <section class="estadisticas">
+
+        <article class="estadistica">
+            <p>Promedio general</p>
+            <h3>
+                <span th:text="${#numbers.formatDecimal(promedioGeneral, 1, 2)}">0.00</span>%
+            </h3>
+        </article>
+
+        <article class="estadistica">
+            <p>Evaluaciones finalizadas</p>
+            <h3 th:text="${evaluacionesFinalizadas}">0</h3>
+        </article>
+
+        <article class="estadistica">
+            <p>Evaluaciones en curso</p>
+            <h3 th:text="${evaluacionesEnCurso}">0</h3>
+        </article>
+
+        <article class="estadistica">
+            <p>Pendientes de revisión</p>
+            <h3 th:text="${evaluacionesPendientes}">0</h3>
+        </article>
+
+    </section>
+
+    <!-- INFORMACIÓN DE LA CUENTA -->
+    <section class="seccion">
+
+        <div class="titulo-seccion">
+            <div class="icono">👤</div>
+            <h2>Información de mi cuenta</h2>
+        </div>
+
+        <div class="datos-grid">
+
+            <article class="dato-card">
+                <p>Nombre de usuario</p>
+                <h3 th:text="${usuario.nombreUsuario}">usuario</h3>
+            </article>
+
+            <article class="dato-card">
+                <p>Rol</p>
+                <h3 th:text="${usuario.rol}">ESTUDIANTE</h3>
+            </article>
+
+            <article class="dato-card">
+                <p>Estado de la cuenta</p>
+                <h3 th:text="${usuario.activo ? 'Activa' : 'Inactiva'}">Activa</h3>
+            </article>
+
+            <article class="dato-card">
+                <p>Fecha de creación</p>
+                <h3 th:text="${usuario.fechaCreacion != null ? #temporals.format(usuario.fechaCreacion, 'dd/MM/yyyy') : 'No disponible'}">
+                    No disponible
+                </h3>
+            </article>
+
+        </div>
+
+    </section>
+
+    <!-- INFORMACIÓN ACADÉMICA -->
+    <section class="seccion">
+
+        <div class="titulo-seccion">
+            <div class="icono">🎓</div>
+            <h2>Mi información académica</h2>
+        </div>
+
+        <div class="datos-grid">
+
+            <article class="dato-card">
+                <p>Código de estudiante</p>
+                <h3 th:text="${estudiante.codigo}">Código</h3>
+            </article>
+
+            <article class="dato-card">
+                <p>Curso</p>
+                <h3 th:text="${estudiante.curso}">6to de secundaria</h3>
+            </article>
+
+            <article class="dato-card">
+                <p>Paralelo</p>
+                <h3 th:text="${estudiante.paralelo}">A</h3>
+            </article>
+
+            <article class="dato-card">
+                <p>Gestión académica</p>
+                <h3 th:text="${estudiante.gestion}">2026</h3>
+            </article>
+
+        </div>
+
+    </section>
+
+    <!-- PROGRESO POR MATERIA -->
+    <section class="seccion">
+
+        <div class="titulo-seccion">
+            <div class="icono">📊</div>
+            <h2>Mi progreso por materia</h2>
+        </div>
+
+        <p class="descripcion-progreso">
+            Se muestra tu resultado más reciente que ya cuenta con calificación.
+        </p>
+
+        <article class="materia-card"
+                 th:each="materia : ${progresoPorMateria}">
+
+            <div class="materia-info">
+
+                <strong th:text="${materia.key}">Matemáticas</strong>
+
+                <span th:if="${materiasEvaluadas.contains(materia.key)}"
+                      th:text="${#numbers.formatDecimal(materia.value, 1, 2)} + '%'">
+                    0%
+                </span>
+
+                <span class="sin-datos"
+                      th:unless="${materiasEvaluadas.contains(materia.key)}">
+                    Sin resultados
+                </span>
+
+            </div>
+
+            <div class="barra-fondo">
+                <div class="barra"
+                     th:style="|width: ${materia.value}%|">
+                </div>
+            </div>
+
+        </article>
+
+        <p class="mensaje-vacio" th:if="${resultadosCalificados == 0}">
+            Todavía no tienes resultados calificados. Completa una evaluación
+            para comenzar a registrar tu progreso.
+        </p>
+
+    </section>
+
+    <!-- ACCIONES -->
+    <section class="acciones">
+
+        <a th:href="@{/estudiante/historial}" class="boton">
+            Ver mi historial →
+        </a>
+
+        <a th:href="@{/estudiante}" class="boton boton-secundario">
+            Ir a mis evaluaciones
+        </a>
+
+    </section>
+
+</main>
+
+<footer>
+    EduNivel 2.0 — Sistema de seguimiento académico · 2026
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intentos de evaluación | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background:
+                radial-gradient(ellipse at 10% 0%, rgba(139,92,246,.14), transparent 35%),
+                radial-gradient(ellipse at 90% 20%, rgba(56,139,255,.10), transparent 35%),
+                #090d1c;
+            color: #f5f3ff;
+            min-height: 100vh;
+        }
+
+        .encabezado {
+            background: rgba(16, 22, 47, .92);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            padding: 23px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            backdrop-filter: blur(15px);
+        }
+
+        .marca {
+            font-family: 'Manrope', sans-serif;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -.8px;
+        }
+
+        .marca span {
+            background: linear-gradient(110deg, #a78bfa, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .encabezado small {
+            display: block;
+            margin-top: 5px;
+            color: #9ba8c8;
+            font-size: 12px;
+        }
+
+        .etiqueta-admin {
+            padding: 9px 15px;
+            border: 1px solid rgba(139,92,246,.3);
+            background: rgba(139,92,246,.12);
+            color: #c4b5fd;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .7px;
+        }
+
+        .contenedor {
+            width: 92%;
+            max-width: 1450px;
+            margin: 38px auto;
+        }
+
+        .volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: #a78bfa;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 27px;
+        }
+
+        .volver:hover {
+            color: #c4b5fd;
+            transform: translateX(-3px);
+        }
+
+        .titulo {
+            margin-bottom: 28px;
+        }
+
+        .titulo .sobretitulo {
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            margin-bottom: 10px;
+        }
+
+        .titulo h1 {
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(25px, 4vw, 34px);
+            font-weight: 800;
+            letter-spacing: -.8px;
+            margin-bottom: 9px;
+        }
+
+        .titulo p {
+            color: #9ba8c8;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .mensaje-error {
+            background: rgba(239,68,68,.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,.25);
+            padding: 14px 17px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .estadistica {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, #192448, #111a35);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 17px;
+            padding: 23px;
+            box-shadow: 0 12px 35px rgba(0,0,0,.18);
+        }
+
+        .estadistica::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            right: -35px;
+            bottom: -45px;
+            border-radius: 50%;
+            background: rgba(139,92,246,.12);
+        }
+
+        .estadistica .icono {
+            width: 39px;
+            height: 39px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(139,92,246,.15);
+            border: 1px solid rgba(139,92,246,.2);
+            border-radius: 11px;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .estadistica span {
+            display: block;
+            color: #a3acc8;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .estadistica h2 {
+            color: #fff;
+            font-family: 'Manrope', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            margin-top: 7px;
+        }
+
+        .estadistica small {
+            display: block;
+            color: #7785a8;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .tabla-contenedor {
+            background: rgba(17,26,53,.88);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,.20);
+            overflow: hidden;
+        }
+
+        .tabla-titulo {
+            padding: 23px 25px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tabla-titulo h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .tabla-titulo p {
+            color: #8794b5;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .tabla-etiqueta {
+            color: #c4b5fd;
+            background: rgba(139,92,246,.12);
+            border: 1px solid rgba(139,92,246,.2);
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .tabla-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1150px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(255,255,255,.025);
+            color: #8996b7;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            text-align: left;
+            padding: 17px 16px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 18px 16px;
+            border-top: 1px solid rgba(255,255,255,.055);
+            font-size: 12px;
+            color: #cbd3e8;
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: background .2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(139,92,246,.055);
+        }
+
+        .estudiante {
+            font-weight: 800;
+            color: #f5f3ff;
+            display: block;
+        }
+
+        .codigo {
+            display: block;
+            margin-top: 5px;
+            color: #8491b0;
+            font-size: 11px;
+        }
+
+        .materia {
+            font-weight: 700;
+            color: #a5b4fc;
+        }
+
+        .calificacion {
+            font-weight: 800;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .estado {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .finalizado {
+            background: rgba(34,197,94,.13);
+            color: #86efac;
+            border: 1px solid rgba(34,197,94,.2);
+        }
+
+        .encurso {
+            background: rgba(56,139,255,.13);
+            color: #93c5fd;
+            border: 1px solid rgba(56,139,255,.2);
+        }
+
+        .pendiente {
+            background: rgba(245,158,11,.13);
+            color: #fcd34d;
+            border: 1px solid rgba(245,158,11,.2);
+        }
+
+        .sin-pendientes {
+            background: rgba(148,163,184,.10);
+            color: #b6c2d9;
+            border: 1px solid rgba(148,163,184,.16);
+        }
+
+        .boton-detalle {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 13px;
+            background: linear-gradient(110deg, #7045d8, #386fe0);
+            color: white;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            transition: all .2s ease;
+        }
+
+        .boton-detalle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(112,69,216,.3);
+            color: white;
+        }
+
+        .vacio {
+            padding: 65px 20px;
+            text-align: center;
+        }
+
+        .vacio .icono {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(139,92,246,.12);
+            border: 1px solid rgba(139,92,246,.2);
+            border-radius: 22px;
+            font-size: 32px;
+        }
+
+        .vacio h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 17px;
+            margin-bottom: 9px;
+        }
+
+        .vacio p {
+            color: #8996b7;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .pie {
+            text-align: center;
+            color: #65718f;
+            font-size: 11px;
+            padding: 30px 15px;
+        }
+
+        @media (max-width: 850px) {
+            .estadisticas {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .encabezado {
+                padding: 19px 5%;
+            }
+
+            .marca {
+                font-size: 22px;
+            }
+
+            .contenedor {
+                width: 94%;
+                margin: 27px auto;
+            }
+
+            .estadisticas {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .estadistica {
+                padding: 19px;
+            }
+
+            .tabla-titulo {
+                padding: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="encabezado">
+    <div>
+        <div class="marca">EduNivel <span>2.0</span></div>
+        <small>Administración de evaluaciones</small>
+    </div>
+
+    <div class="etiqueta-admin">PANEL ADMINISTRATIVO</div>
+</header>
+
+<main class="contenedor">
+
+    <a th:href="@{/admin/evaluaciones}" class="volver">
+        ← Volver a evaluaciones
+    </a>
+
+    <section class="titulo">
+        <div class="sobretitulo">SEGUIMIENTO ACADÉMICO</div>
+        <h1>Intentos de los estudiantes</h1>
+        <p>
+            Consulta las evaluaciones realizadas y en curso
+            de sexto de secundaria, gestión 2026.
+        </p>
+    </section>
+
+    <div th:if="${error}" class="mensaje-error" th:text="${error}"></div>
+
+    <section class="estadisticas">
+
+        <div class="estadistica">
+            <div class="icono">📋</div>
+            <span>Total de intentos registrados</span>
+            <h2 th:text="${totalIntentos}">0</h2>
+            <small>Intentos almacenados en EduNivel</small>
+        </div>
+
+        <div class="estadistica">
+            <div class="icono">🎓</div>
+            <span>Seguimiento</span>
+            <h2>2026</h2>
+            <small>Gestión académica actual</small>
+        </div>
+
+        <div class="estadistica">
+            <div class="icono">📚</div>
+            <span>Nivel académico</span>
+            <h2>6to</h2>
+            <small>Secundaria</small>
+        </div>
+
+    </section>
+
+    <section class="tabla-contenedor">
+
+        <div class="tabla-titulo">
+            <div>
+                <h2>Registro de intentos</h2>
+                <p>Detalle de la actividad de los estudiantes.</p>
+            </div>
+
+            <div class="tabla-etiqueta">HISTORIAL DE EVALUACIONES</div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(intentos)}" class="vacio">
+            <div class="icono">📝</div>
+            <h3>Aún no hay intentos registrados</h3>
+            <p>
+                Cuando los estudiantes comiencen sus evaluaciones,
+                sus intentos aparecerán aquí.
+            </p>
+        </div>
+
+        <div class="tabla-scroll" th:unless="${#lists.isEmpty(intentos)}">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>Materia</th>
+                        <th>Fecha de inicio</th>
+                        <th>Fecha de finalización</th>
+                        <th>Calificación</th>
+                        <th>Estado</th>
+                        <th>Revisión</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="intento : ${intentos}">
+
+                        <td>
+                            <span class="estudiante"
+                                  th:text="${intento.estudiante.usuario != null ? intento.estudiante.usuario.nombreUsuario : 'Sin usuario'}">
+                                Estudiante
+                            </span>
+
+                            <span class="codigo"
+                                  th:text="${'Código: ' + intento.estudiante.codigo}">
+                                Código
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="materia" th:text="${intento.examen.area}">
+                                Materia
+                            </span>
+                        </td>
+
+                        <td th:text="${intento.fechaInicio != null ? #temporals.format(intento.fechaInicio, 'dd/MM/yyyy HH:mm') : 'No registrada'}">
+                            Fecha inicio
+                        </td>
+
+                        <td th:text="${intento.fechaFin != null ? #temporals.format(intento.fechaFin, 'dd/MM/yyyy HH:mm') : 'En curso'}">
+                            Fecha fin
+                        </td>
+
+                        <td>
+                            <span class="calificacion"
+                                  th:if="${intento.puntajeObtenido != null}"
+                                  th:text="${#numbers.formatDecimal(intento.puntajeObtenido, 1, 2) + ' / ' + #numbers.formatDecimal(intento.examen.puntajeTotal, 1, 2)}">
+                                0 / 100
+                            </span>
+
+                            <span th:unless="${intento.puntajeObtenido != null}">—</span>
+                        </td>
+
+                        <td>
+                            <span th:if="${intento.estado == 'FINALIZADO'}"
+                                  class="estado finalizado">● Finalizado</span>
+
+                            <span th:if="${intento.estado == 'EN_CURSO'}"
+                                  class="estado encurso">● En curso</span>
+                        </td>
+
+                        <td>
+                            <span th:if="${intento.pendienteRevision}"
+                                  class="estado pendiente">● Pendiente</span>
+
+                            <span th:unless="${intento.pendienteRevision}"
+                                  class="estado sin-pendientes">● Sin pendientes</span>
+                        </td>
+
+                        <td>
+                            <a class="boton-detalle"
+                               th:href="@{/admin/evaluaciones/intentos/{id}(id=${intento.id})}">
+                                Ver detalle →
+                            </a>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+</main>
+
+<footer class="pie">
+    EduNivel 2.0 · Administración de evaluaciones · 2026
+</footer>
+
+</body>
+</html>

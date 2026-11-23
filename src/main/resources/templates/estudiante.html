@@ -1,0 +1,1138 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del estudiante | EduNivel 2.0</title>
+
+   
+<style>
+:root {
+    --fondo: #090d1c;
+    --panel: #141b35;
+    --panel-hover: #202b50;
+    --texto: #f5f3ff;
+    --muted: #a3acc8;
+    --morado: #965cff;
+    --azul: #388bff;
+    --naranja: #ff9d42;
+    --verde: #35d39a;
+    --borde: rgba(255,255,255,.09);
+    --gradiente: linear-gradient(110deg,#965cff,#388bff);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'DM Sans','Segoe UI',sans-serif;
+    color: var(--texto);
+    background:
+        radial-gradient(ellipse at 10% 5%,rgba(139,92,246,.17),transparent 32%),
+        radial-gradient(ellipse at 90% 30%,rgba(56,139,255,.12),transparent 30%),
+        var(--fondo);
+}
+
+header {
+    padding: 23px 8%;
+    background: rgba(13,19,41,.93);
+    border-bottom: 1px solid var(--borde);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 30px rgba(0,0,0,.17);
+}
+
+header h1 {
+    font-family: 'Manrope',sans-serif;
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -.7px;
+    background: var(--gradiente);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+header p {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+main {
+    max-width: 1200px;
+    margin: 38px auto;
+    padding: 0 22px;
+}
+
+.bienvenida {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 28px;
+    padding: 30px;
+    border-radius: 21px;
+    border: 1px solid rgba(150,92,255,.24);
+    background:
+        linear-gradient(110deg,rgba(139,92,246,.18),rgba(56,139,255,.09)),
+        var(--panel);
+    box-shadow: 0 12px 35px rgba(0,0,0,.18);
+}
+
+.bienvenida::after {
+    content: "✦";
+    position: absolute;
+    right: 35px;
+    top: 5px;
+    font-size: 100px;
+    color: rgba(167,139,250,.09);
+    pointer-events: none;
+}
+
+.bienvenida h2 {
+    position: relative;
+    z-index: 1;
+    font-family: 'Manrope',sans-serif;
+    font-size: clamp(24px,4vw,32px);
+    font-weight: 800;
+    margin-bottom: 9px;
+}
+
+.bienvenida h2 span {
+    color: #b99aff;
+}
+
+.bienvenida p {
+    position: relative;
+    z-index: 1;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ESTADÍSTICAS */
+
+.estadisticas {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 17px;
+    margin-bottom: 30px;
+}
+
+.estadistica {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg,#1b2545,#131a32);
+    padding: 23px;
+    border-radius: 18px;
+    border: 1px solid var(--borde);
+    border-bottom: 3px solid var(--acento);
+    transition: .25s ease;
+}
+
+.estadistica:hover {
+    transform: translateY(-5px);
+    background: var(--panel-hover);
+    box-shadow: 0 12px 28px rgba(0,0,0,.2);
+}
+
+.estadistica:nth-child(1) {--acento:#a78bfa;}
+.estadistica:nth-child(2) {--acento:#48a5ff;}
+.estadistica:nth-child(3) {--acento:#ff9a50;}
+.estadistica:nth-child(4) {--acento:#42d9a0;}
+
+.estadistica p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 13px;
+}
+
+.estadistica h3 {
+    color: var(--acento);
+    font-family: 'Manrope',sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 7px;
+    overflow-wrap: anywhere;
+}
+
+.estadistica small {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.estadistica.mejor-materia h3 {
+    font-size: 19px;
+}
+
+/* TARJETAS */
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 17px;
+}
+
+.tarjeta {
+    background: linear-gradient(145deg,#192342,#121a32);
+    border: 1px solid var(--borde);
+    border-radius: 18px;
+    padding: 24px;
+    transition: .25s ease;
+}
+
+.tarjeta:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139,92,246,.4);
+    background: var(--panel-hover);
+}
+
+.tarjeta h3 {
+    color: #c4b5fd;
+    font-family: 'Manrope',sans-serif;
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.dato {
+    margin: 12px 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.dato strong {
+    color: #f1edff;
+}
+
+/* SECCIONES */
+
+.seccion {
+    margin-top: 38px;
+}
+
+.seccion h2,
+.analisis-rendimiento > h2 {
+    color: var(--texto);
+    font-family: 'Manrope',sans-serif;
+    font-size: 21px;
+    margin-bottom: 9px;
+}
+
+.descripcion {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* EVALUACIONES */
+
+.evaluaciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+    gap: 18px;
+}
+
+.evaluacion {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg,#192342,#121a32);
+    padding: 24px;
+    border-radius: 18px;
+    border: 1px solid var(--borde);
+    border-top: 3px solid var(--morado);
+    transition: .25s ease;
+}
+
+.evaluacion:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139,92,246,.5);
+    box-shadow: 0 12px 28px rgba(0,0,0,.2);
+}
+
+.evaluacion h3 {
+    color: #c4b5fd;
+    font-family: 'Manrope',sans-serif;
+    font-size: 18px;
+    margin-bottom: 13px;
+}
+
+.evaluacion p {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.evaluacion strong {
+    color: #f1edff;
+}
+
+.estado {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-top: 11px;
+}
+
+.preparacion {
+    background: rgba(255,135,61,.14);
+    color: #ffbd88;
+    border: 1px solid rgba(255,135,61,.2);
+}
+
+.disponible {
+    background: rgba(53,211,154,.13);
+    color: #7af0c0;
+    border: 1px solid rgba(53,211,154,.2);
+}
+
+.boton-iniciar,
+.boton-historial {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 12px 17px;
+    background: var(--gradiente);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    transition: .25s ease;
+}
+
+.boton-iniciar:hover,
+.boton-historial:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(111,80,235,.3);
+    color: white;
+}
+
+.sin-evaluaciones {
+    background: var(--panel);
+    padding: 24px;
+    border-radius: 15px;
+    border: 1px dashed rgba(255,255,255,.17);
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* AVISO */
+
+.aviso {
+    background: linear-gradient(110deg,rgba(139,92,246,.16),rgba(255,135,61,.1));
+    border: 1px solid rgba(139,92,246,.25);
+    border-radius: 15px;
+    padding: 21px;
+    margin-top: 30px;
+}
+
+.aviso strong {
+    display: block;
+    color: #c4b5fd;
+    margin-bottom: 8px;
+}
+
+.aviso p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* PROGRESO */
+
+.progreso-materias {
+    background: linear-gradient(145deg,#192342,#121a32);
+    padding: 26px;
+    border-radius: 19px;
+    margin: 25px 0;
+    border: 1px solid var(--borde);
+}
+
+.progreso-materias h2 {
+    color: var(--texto);
+    font-family: 'Manrope',sans-serif;
+    font-size: 21px;
+    margin-bottom: 8px;
+}
+
+.progreso-descripcion {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.progreso-item {
+    margin-bottom: 23px;
+}
+
+.progreso-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.progreso-nombre {
+    color: #e8e3ff;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.progreso-porcentaje {
+    color: #a78bfa;
+    font-weight: 800;
+    font-size: 13px;
+}
+
+.progreso-fondo {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,.09);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progreso-relleno {
+    height: 100%;
+    background: linear-gradient(90deg,var(--morado),var(--azul),var(--naranja));
+    border-radius: 20px;
+    transition: width .5s ease;
+    box-shadow: 0 0 12px rgba(139,92,246,.25);
+}
+
+/* GRÁFICO */
+
+.grafico-comparativo {
+    background: #111a35;
+    padding: 25px;
+    border-radius: 18px;
+    margin: 30px 0;
+    border: 1px solid var(--borde);
+}
+
+.grafico-comparativo h2 {
+    color: var(--texto);
+    font-family: 'Manrope',sans-serif;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.grafico-descripcion {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.grafico-columnas {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 18px;
+    align-items: end;
+}
+
+.grafico-columna {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+}
+
+.grafico-valor {
+    color: #a78bfa;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.grafico-fondo {
+    width: 100%;
+    max-width: 85px;
+    height: 180px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.grafico-barra {
+    width: 100%;
+    background: linear-gradient(180deg,#a78bfa,#388bff,#ff873d);
+    border-radius: 10px 10px 0 0;
+    transition: height .5s ease;
+}
+
+.grafico-materia {
+    margin-top: 12px;
+    color: #d5d0e8;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* ANÁLISIS */
+
+.analisis-rendimiento {
+    margin: 30px 0;
+}
+
+.analisis-rendimiento h2 {
+    color: var(--texto);
+    font-family: 'Manrope',sans-serif;
+    font-size: 21px;
+    margin-bottom: 17px;
+}
+
+.analisis-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 18px;
+}
+
+.analisis-card {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 24px;
+    border: 1px solid var(--borde);
+}
+
+.analisis-card.fortaleza {
+    border-left: 4px solid var(--verde);
+}
+
+.analisis-card.reforzar {
+    border-left: 4px solid var(--naranja);
+}
+
+.analisis-etiqueta {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+}
+
+.analisis-materia {
+    color: #f1edff;
+    font-family: 'Manrope',sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+    margin: 13px 0;
+}
+
+.analisis-porcentaje {
+    font-size: 28px;
+    font-weight: 800;
+    color: #a78bfa;
+}
+
+.analisis-mensaje {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 9px;
+    line-height: 1.6;
+}
+
+.analisis-vacio {
+    background: var(--panel);
+    padding: 23px;
+    border-radius: 16px;
+    color: var(--muted);
+    border: 1px solid var(--borde);
+    line-height: 1.7;
+    font-size: 13px;
+}
+
+.analisis-vacio strong {
+    color: #c4b5fd;
+}
+
+/* PIE */
+
+footer {
+    text-align: center;
+    padding: 27px;
+    color: #85819f;
+    font-size: 12px;
+    border-top: 1px solid var(--borde);
+    margin-top: 35px;
+    background: rgba(10,15,31,.45);
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 900px) {
+    .estadisticas {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+    .tarjetas {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width: 650px) {
+    header {
+        padding: 20px 6%;
+    }
+
+    main {
+        margin-top: 27px;
+        padding: 0 16px;
+    }
+
+    .bienvenida {
+        padding: 23px 19px;
+    }
+
+    .bienvenida h2 {
+        font-size: 23px;
+    }
+
+    .tarjetas,
+    .analisis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .grafico-columnas {
+        gap: 9px;
+    }
+
+    .grafico-fondo {
+        height: 140px;
+    }
+
+    .grafico-materia {
+        font-size: 10px;
+    }
+
+    .grafico-valor {
+        font-size: 11px;
+    }
+
+    .progreso-materias,
+    .grafico-comparativo {
+        padding: 19px 15px;
+    }
+}
+
+@media(max-width: 390px) {
+    .estadisticas {
+        grid-template-columns: 1fr;
+    }
+
+    .estadistica {
+        padding: 18px;
+    }
+}
+
+button,
+input[type="submit"],
+input[type="button"] {
+    font-family: inherit;
+    border-radius: 10px;
+    transition: all .25s ease;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    filter: brightness(1.13);
+    transform: translateY(-2px);
+}
+
+a {
+    transition: color .2s ease;
+}
+
+@media(prefers-reduced-motion: reduce) {
+    *,*::before,*::after {
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+
+<link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+</head>
+
+<body>
+
+<header>
+    <h1>EduNivel 2.0</h1>
+    <p>Plataforma de evaluación y seguimiento académico</p>
+</header>
+
+<main>
+
+    <section class="bienvenida">
+        <h2>
+            ¡Bienvenido,
+            <span th:text="${usuario.nombreUsuario}"></span>!
+        </h2>
+        <p>Este es tu espacio personal de aprendizaje.</p>
+    </section>
+<!-- ESTADÍSTICAS ACADÉMICAS DEL ESTUDIANTE -->
+
+<section class="estadisticas">
+
+    <!-- EVALUACIONES FINALIZADAS -->
+    <article class="estadistica">
+        <p>Evaluaciones finalizadas</p>
+
+        <h3 th:text="${evaluacionesFinalizadas}">0</h3>
+
+        <small>Total de evaluaciones terminadas</small>
+    </article>
+
+    <!-- PROMEDIO GENERAL -->
+    <article class="estadistica">
+        <p>Promedio general</p>
+
+        <h3>
+            <span th:text="${#numbers.formatDecimal(promedioGeneral, 1, 2)}">0.00</span>%
+        </h3>
+
+        <small>Promedio de resultados calificados</small>
+    </article>
+
+    <!-- MEJOR MATERIA -->
+    <article class="estadistica mejor-materia">
+        <p>Mi mejor materia</p>
+
+        <h3 th:if="${hayResultadosCalificados}"
+            th:text="${mejorMateria}">
+            Sin resultados
+        </h3>
+
+        <h3 th:unless="${hayResultadosCalificados}">
+            Sin resultados
+        </h3>
+
+        <small th:if="${hayResultadosCalificados}">
+            <span th:text="${#numbers.formatDecimal(mejorPorcentaje, 1, 2)}">0.00</span>% obtenido
+        </small>
+
+        <small th:unless="${hayResultadosCalificados}">
+            Completa una evaluación para descubrirla
+        </small>
+    </article>
+
+    <!-- EVALUACIONES EN CURSO -->
+    <article class="estadistica">
+        <p>Evaluaciones en curso</p>
+
+        <h3 th:text="${evaluacionesEnCurso}">0</h3>
+
+        <small>Evaluaciones que puedes continuar</small>
+    </article>
+
+</section>
+<!-- PROGRESO POR MATERIA -->
+<section class="progreso-materias">
+
+    <h2>Mi progreso por materia</h2>
+
+    <p class="progreso-descripcion">
+        Consulta tu último resultado calificado en cada materia.
+    </p>
+
+    <!-- MATEMÁTICAS -->
+    <div class="progreso-item">
+
+        <div class="progreso-info">
+            <span class="progreso-nombre">Matemáticas</span>
+
+            <span class="progreso-porcentaje"
+                  th:text="${#numbers.formatDecimal(progresoPorMateria['Matemáticas'], 1, 2)} + '%'">
+                0%
+            </span>
+        </div>
+
+        <div class="progreso-fondo">
+            <div class="progreso-relleno"
+                 th:style="|width: ${progresoPorMateria['Matemáticas']}%|">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- COMPRENSIÓN LECTORA -->
+    <div class="progreso-item">
+
+        <div class="progreso-info">
+            <span class="progreso-nombre">Comprensión lectora</span>
+
+            <span class="progreso-porcentaje"
+                  th:text="${#numbers.formatDecimal(progresoPorMateria['Comprensión lectora'], 1, 2)} + '%'">
+                0%
+            </span>
+        </div>
+
+        <div class="progreso-fondo">
+            <div class="progreso-relleno"
+                 th:style="|width: ${progresoPorMateria['Comprensión lectora']}%|">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RAZONAMIENTO LÓGICO -->
+    <div class="progreso-item">
+
+        <div class="progreso-info">
+            <span class="progreso-nombre">Razonamiento lógico</span>
+
+            <span class="progreso-porcentaje"
+                  th:text="${#numbers.formatDecimal(progresoPorMateria['Razonamiento lógico'], 1, 2)} + '%'">
+                0%
+            </span>
+        </div>
+
+        <div class="progreso-fondo">
+            <div class="progreso-relleno"
+                 th:style="|width: ${progresoPorMateria['Razonamiento lógico']}%|">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LENGUAJE -->
+    <div class="progreso-item">
+
+        <div class="progreso-info">
+            <span class="progreso-nombre">Lenguaje</span>
+
+            <span class="progreso-porcentaje"
+                  th:text="${#numbers.formatDecimal(progresoPorMateria['Lenguaje'], 1, 2)} + '%'">
+                0%
+            </span>
+        </div>
+
+        <div class="progreso-fondo">
+            <div class="progreso-relleno"
+                 th:style="|width: ${progresoPorMateria['Lenguaje']}%|">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GRAFICO COMPARATIVO DE MATERIAS -->
+    <section class="grafico-comparativo">
+
+        <h2>Comparación de rendimiento</h2>
+
+        <p class="grafico-descripcion">
+            Compara tus últimos resultados calificados en las cuatro materias.
+        </p>
+
+        <div class="grafico-columnas"
+             th:if="${!#lists.isEmpty(materiasEvaluadas)}">
+
+            <!-- MATEMATICAS -->
+            <div class="grafico-columna">
+
+                <span class="grafico-valor"
+                      th:text="${materiasEvaluadas.contains('Matemáticas') ? #numbers.formatDecimal(progresoPorMateria['Matemáticas'], 1, 2) + '%' : 'Sin datos'}">
+                    0%
+                </span>
+
+                <div class="grafico-fondo">
+                    <div class="grafico-barra"
+                         th:style="|height: ${progresoPorMateria['Matemáticas']}%|">
+                    </div>
+                </div>
+
+                <span class="grafico-materia">Matemáticas</span>
+
+            </div>
+
+            <!-- COMPRENSION LECTORA -->
+            <div class="grafico-columna">
+
+                <span class="grafico-valor"
+                      th:text="${materiasEvaluadas.contains('Comprensión lectora') ? #numbers.formatDecimal(progresoPorMateria['Comprensión lectora'], 1, 2) + '%' : 'Sin datos'}">
+                    0%
+                </span>
+
+                <div class="grafico-fondo">
+                    <div class="grafico-barra"
+                         th:style="|height: ${progresoPorMateria['Comprensión lectora']}%|">
+                    </div>
+                </div>
+
+                <span class="grafico-materia">Comprensión lectora</span>
+
+            </div>
+
+            <!-- RAZONAMIENTO LOGICO -->
+            <div class="grafico-columna">
+
+                <span class="grafico-valor"
+                      th:text="${materiasEvaluadas.contains('Razonamiento lógico') ? #numbers.formatDecimal(progresoPorMateria['Razonamiento lógico'], 1, 2) + '%' : 'Sin datos'}">
+                    0%
+                </span>
+
+                <div class="grafico-fondo">
+                    <div class="grafico-barra"
+                         th:style="|height: ${progresoPorMateria['Razonamiento lógico']}%|">
+                    </div>
+                </div>
+
+                <span class="grafico-materia">Razonamiento lógico</span>
+
+            </div>
+
+            <!-- LENGUAJE -->
+            <div class="grafico-columna">
+
+                <span class="grafico-valor"
+                      th:text="${materiasEvaluadas.contains('Lenguaje') ? #numbers.formatDecimal(progresoPorMateria['Lenguaje'], 1, 2) + '%' : 'Sin datos'}">
+                    0%
+                </span>
+
+                <div class="grafico-fondo">
+                    <div class="grafico-barra"
+                         th:style="|height: ${progresoPorMateria['Lenguaje']}%|">
+                    </div>
+                </div>
+
+                <span class="grafico-materia">Lenguaje</span>
+
+            </div>
+
+        </div>
+
+        <div class="analisis-vacio"
+             th:if="${#lists.isEmpty(materiasEvaluadas)}">
+
+            Todavía no tienes resultados calificados para comparar.
+            Completa una evaluación para generar tu gráfico.
+
+        </div>
+
+    </section>
+
+
+   <!-- ANALISIS DE RENDIMIENTO -->
+<section class="analisis-rendimiento">
+
+    <h2>Mi análisis de rendimiento</h2>
+
+    <!-- MOSTRAR RESULTADOS SI EXISTEN -->
+    <div class="analisis-grid"
+         th:if="${!#lists.isEmpty(materiasEvaluadas)}">
+
+        <!-- MI FORTALEZA -->
+        <div class="analisis-card fortaleza">
+
+            <div class="analisis-etiqueta">
+                Mi fortaleza
+            </div>
+
+            <div class="analisis-materia"
+                 th:text="${materiaMasFuerte}">
+                Matemáticas
+            </div>
+
+            <div class="analisis-porcentaje"
+                 th:text="${#numbers.formatDecimal(mejorResultadoMateria, 1, 2)} + '%'">
+                90.00%
+            </div>
+
+            <p class="analisis-mensaje">
+                Esta es la materia en la que obtuviste tu mejor resultado.
+                ¡Sigue así!
+            </p>
+
+        </div>
+
+        <!-- MATERIA POR REFORZAR -->
+        <div class="analisis-card reforzar">
+
+            <div class="analisis-etiqueta">
+                Necesito reforzar
+            </div>
+
+            <div class="analisis-materia"
+                 th:text="${materiaPorReforzar}">
+                Lenguaje
+            </div>
+
+            <div class="analisis-porcentaje"
+                 th:text="${#numbers.formatDecimal(menorResultadoMateria, 1, 2)} + '%'">
+                50.00%
+            </div>
+
+            <p class="analisis-mensaje">
+                Esta es la materia en la que obtuviste tu resultado más bajo.
+                Dedícale un poco más de práctica.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- MENSAJE CUANDO NO HAY RESULTADOS -->
+    <div class="analisis-vacio"
+         th:if="${#lists.isEmpty(materiasEvaluadas)}">
+
+        <strong>¡Tu progreso está comenzando!</strong>
+
+        <p>
+            Cuando completes y tengas calificadas tus evaluaciones,
+            aquí podrás conocer tus fortalezas y las materias que
+            necesitas reforzar.
+        </p>
+
+    </div>
+
+</section>
+</section>
+    <section class="tarjetas">
+
+        <article class="tarjeta">
+            <h3>Mi información académica</h3>
+
+            <div th:if="${estudiante != null}">
+                <p class="dato">
+                    <strong>Código:</strong>
+                    <span th:text="${estudiante.codigo}"></span>
+                </p>
+
+                <p class="dato">
+                    <strong>Curso:</strong>
+                    <span th:text="${estudiante.curso}"></span>
+                </p>
+
+                <p class="dato">
+                    <strong>Paralelo:</strong>
+                    <span th:text="${estudiante.paralelo}"></span>
+                </p>
+
+                <p class="dato">
+                    <strong>Gestión:</strong>
+                    <span th:text="${estudiante.gestion}"></span>
+                </p>
+            </div>
+
+            <div th:if="${estudiante == null}">
+                <p class="dato">
+                    Tu cuenta todavía no tiene un registro académico vinculado.
+                </p>
+            </div>
+        </article>
+
+        <article class="tarjeta">
+            <h3>Evaluación diagnóstica</h3>
+            <p class="dato">
+                Realiza evaluaciones para conocer tu nivel de conocimiento.
+            </p>
+            <p class="dato">
+                <strong>Áreas:</strong> 4 materias académicas.
+            </p>
+        </article>
+
+       <article class="tarjeta">
+    <h3>Mi progreso</h3>
+
+    <p class="dato">
+        Consulta tus resultados y avances académicos.
+    </p>
+
+    <p class="dato">
+        Revisa todas tus evaluaciones realizadas.
+    </p>
+
+    <a th:href="@{/estudiante/historial}"
+       class="boton-historial">
+        Ver mi historial →
+    </a>
+</article>
+
+    </section>
+
+    <section class="seccion">
+
+        <h2>Mis evaluaciones diagnósticas</h2>
+
+        <p class="descripcion">
+            Selecciona una de las áreas académicas para conocer tu nivel de aprendizaje.
+        </p>
+
+        <div class="evaluaciones" th:if="${!#lists.isEmpty(examenes)}">
+
+            <article class="evaluacion" th:each="examen : ${examenes}">
+
+                <h3 th:text="${examen.area}"></h3>
+
+                <p th:text="${examen.titulo}"></p>
+
+                <p>
+                    <strong>Preguntas:</strong>
+                    <span th:text="${cantidadPreguntas[examen.id]}"></span>
+                </p>
+
+                <p>
+                    <strong>Duración:</strong>
+                    <span th:text="${examen.duracionMinutos}"></span>
+                    minutos
+                </p>
+
+                <span
+                    class="estado preparacion"
+                    th:if="${cantidadPreguntas[examen.id] == 0}">
+                    En preparación
+                </span>
+
+                <span
+                    class="estado disponible"
+                    th:if="${cantidadPreguntas[examen.id] > 0}">
+                    Disponible
+                </span>
+                <a th:if="${cantidadPreguntas[examen.id] > 0}"
+   th:href="@{/estudiante/examen/{id}(id=${examen.id})}"
+   class="boton-iniciar">
+    Iniciar evaluación →
+</a>
+
+            </article>
+
+        </div>
+
+        <div class="sin-evaluaciones" th:if="${#lists.isEmpty(examenes)}">
+            Todavía no hay evaluaciones asignadas a tu curso y gestión.
+        </div>
+
+    </section>
+
+    <div class="aviso">
+        <strong>¡Prepárate para aprender!</strong>
+        <p>
+            Las evaluaciones estarán disponibles cuando se carguen
+            sus respectivas preguntas.
+        </p>
+    </div>
+
+</main>
+
+<footer>
+    EduNivel 2.0 — Sistema de seguimiento académico
+</footer>
+
+</body>
+</html>
+

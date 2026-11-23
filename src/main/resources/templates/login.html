@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#090d1c">
+
+    <title>Iniciar sesión | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            font-family: 'DM Sans', sans-serif;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(139,92,246,.22), transparent 35%),
+                radial-gradient(circle at 85% 85%, rgba(56,139,255,.18), transparent 35%),
+                #090d1c;
+            color: #f5f3ff;
+        }
+
+        .login-layout {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 590px;
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 25px;
+            background: #111a35;
+            box-shadow: 0 25px 80px rgba(0,0,0,.35);
+        }
+
+        .panel-visual {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px;
+            background:
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,.15), transparent 35%),
+                linear-gradient(145deg, #5735a5, #263d91 65%, #152c65);
+        }
+
+        .marca {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .marca-icono {
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: rgba(255,255,255,.17);
+            border: 1px solid rgba(255,255,255,.22);
+            font-family: 'Manrope', sans-serif;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .marca-texto strong {
+            display: block;
+            font-family: 'Manrope', sans-serif;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .marca-texto small {
+            display: block;
+            color: rgba(255,255,255,.70);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .visual-contenido {
+            position: relative;
+            z-index: 2;
+            max-width: 430px;
+        }
+
+        .visual-etiqueta {
+            display: inline-block;
+            padding: 8px 13px;
+            border-radius: 30px;
+            background: rgba(255,255,255,.13);
+            border: 1px solid rgba(255,255,255,.18);
+            color: #e9ddff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .8px;
+            margin-bottom: 20px;
+        }
+
+        .visual-contenido h1 {
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(30px, 4vw, 43px);
+            font-weight: 800;
+            line-height: 1.18;
+            margin-bottom: 18px;
+        }
+
+        .visual-contenido p {
+            color: rgba(255,255,255,.78);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .visual-ilustracion {
+            position: absolute;
+            right: 35px;
+            bottom: 105px;
+            width: 210px;
+            height: 210px;
+            display: grid;
+            place-items: center;
+            font-size: 105px;
+            opacity: .85;
+            transform: rotate(-8deg);
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,.20));
+        }
+
+        .visual-footer {
+            position: relative;
+            z-index: 2;
+            color: rgba(255,255,255,.62);
+            font-size: 12px;
+        }
+
+        .panel-formulario {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 45px 38px;
+            background: linear-gradient(145deg, #192041, #111a35);
+        }
+
+        .formulario-marca {
+            display: none;
+            margin-bottom: 35px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .formulario-marca span {
+            color: #a78bfa;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 13px;
+        }
+
+        .panel-formulario h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 9px;
+        }
+
+        .descripcion {
+            color: #a3acc8;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .message {
+            padding: 13px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 17px;
+        }
+
+        .error {
+            background: rgba(239,68,68,.11);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,.22);
+        }
+
+        .success {
+            background: rgba(34,197,94,.10);
+            color: #86efac;
+            border: 1px solid rgba(34,197,94,.22);
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #e2e8f0;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icono {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            opacity: .75;
+            pointer-events: none;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 14px 14px 43px;
+            background: #0c1228;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 11px;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        input::placeholder {
+            color: #77819e;
+        }
+
+        input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139,92,246,.15);
+        }
+
+        .boton-login {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 11px;
+            background: linear-gradient(110deg, #8b5cf6, #388bff);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 5px;
+            transition: .25s;
+        }
+
+        .boton-login:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.12);
+            box-shadow: 0 10px 25px rgba(100,90,230,.25);
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 25px;
+            color: #a3acc8;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .register a {
+            color: #a78bfa;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .register a:hover {
+            color: #c4b5fd;
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            color: #69738f;
+            font-size: 11px;
+        }
+
+        @media(max-width: 800px) {
+            .login-layout {
+                max-width: 480px;
+                min-height: auto;
+                grid-template-columns: 1fr;
+            }
+
+            .panel-visual {
+                display: none;
+            }
+
+            .panel-formulario {
+                padding: 40px 35px;
+            }
+
+            .formulario-marca {
+                display: block;
+            }
+        }
+
+        @media(max-width: 450px) {
+            body {
+                padding: 14px;
+            }
+
+            .login-layout {
+                border-radius: 18px;
+            }
+
+            .panel-formulario {
+                padding: 32px 23px;
+            }
+
+            .panel-formulario h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-layout">
+
+    <section class="panel-visual">
+
+        <div class="marca">
+            <div class="marca-icono">E+</div>
+
+            <div class="marca-texto">
+                <strong>EduNivel 2.0</strong>
+                <small>Tu siguiente nivel</small>
+            </div>
+        </div>
+
+        <div class="visual-contenido">
+            <span class="visual-etiqueta">APRENDE · PRACTICA · PROGRESA</span>
+
+            <h1>Tu aprendizaje merece llegar más lejos.</h1>
+
+            <p>
+                Explora tus conocimientos, descubre tus fortalezas
+                y prepárate para los desafíos de tu futuro académico.
+            </p>
+        </div>
+
+        <div class="visual-ilustracion" aria-hidden="true">
+            📚
+        </div>
+
+        <div class="visual-footer">
+            EduNivel 2.0 · Plataforma educativa
+        </div>
+
+    </section>
+
+    <main class="panel-formulario">
+
+        <div class="formulario-marca">
+            Edu<span>Nivel</span> 2.0
+        </div>
+
+        <span class="etiqueta">BIENVENIDO DE NUEVO</span>
+
+        <h2>Inicia sesión</h2>
+
+        <p class="descripcion">
+            Ingresa tus credenciales para acceder a tu espacio de aprendizaje.
+        </p>
+
+        <div th:if="${param.error}" class="message error">
+            Usuario o contraseña incorrectos. Verifica tus datos.
+        </div>
+
+        <div th:if="${param.logout}" class="message success">
+            Has cerrado sesión correctamente.
+        </div>
+
+        <div th:if="${mensaje}" class="message success"
+             th:text="${mensaje}">
+        </div>
+
+        <form th:action="@{/login}" method="post">
+
+            <div class="campo">
+                <label for="username">Nombre de usuario</label>
+
+                <div class="input-wrap">
+                    <span class="input-icono">👤</span>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Ingresa tu usuario"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="password">Contraseña</label>
+
+                <div class="input-wrap">
+                    <span class="input-icono">🔒</span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Ingresa tu contraseña"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+            </div>
+
+            <button type="submit" class="boton-login">
+                Iniciar sesión →
+            </button>
+
+        </form>
+
+        <div class="register">
+            ¿Todavía no tienes cuenta?
+            <a th:href="@{/registro}">Regístrate aquí</a>
+        </div>
+
+        <div class="footer">
+            EduNivel 2.0 · Plataforma educativa · 2026
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,719 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del intento | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background:
+                radial-gradient(ellipse at 10% 0%, rgba(139,92,246,.14), transparent 35%),
+                radial-gradient(ellipse at 90% 20%, rgba(56,139,255,.10), transparent 35%),
+                #090d1c;
+            color: #f5f3ff;
+            min-height: 100vh;
+            padding: 30px 0;
+        }
+
+        .contenedor {
+            width: 92%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .marca {
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+            color: #a78bfa;
+            font-weight: 800;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .encabezado h1 {
+            font-family: 'Manrope', sans-serif;
+            color: #fff;
+            font-size: clamp(25px, 4vw, 33px);
+            font-weight: 800;
+            letter-spacing: -.8px;
+            margin-bottom: 7px;
+        }
+
+        .encabezado p {
+            color: #98a5c4;
+            font-size: 13px;
+        }
+
+        .boton-volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139,92,246,.13);
+            border: 1px solid rgba(139,92,246,.28);
+            color: #c4b5fd;
+            text-decoration: none;
+            padding: 12px 17px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 12px;
+            transition: all .2s ease;
+        }
+
+        .boton-volver:hover {
+            background: rgba(139,92,246,.23);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .seccion {
+            background: rgba(17,26,53,.85);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 17px;
+            padding: 23px;
+            margin-bottom: 25px;
+            box-shadow: 0 12px 35px rgba(0,0,0,.16);
+        }
+
+        .seccion-cabecera {
+            margin-bottom: 20px;
+        }
+
+        .seccion-cabecera h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .seccion-cabecera p {
+            color: #8996b7;
+            font-size: 12px;
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+
+        .resumen {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .dato {
+            background: linear-gradient(145deg, #192448, #111a35);
+            padding: 21px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.08);
+            min-width: 0;
+        }
+
+        .dato span {
+            display: block;
+            color: #91a0c1;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .dato strong {
+            color: #f5f3ff;
+            font-size: 15px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+            line-height: 1.5;
+        }
+
+        .dato-calificacion {
+            background: linear-gradient(135deg, rgba(112,69,216,.22), rgba(56,139,255,.13));
+            border-color: rgba(139,92,246,.3);
+        }
+
+        .dato-calificacion strong {
+            color: #c4b5fd;
+            font-size: 21px;
+        }
+
+        .titulo-rendimiento {
+            font-family: 'Manrope', sans-serif;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 800;
+            margin: 30px 0 8px;
+        }
+
+        .descripcion-rendimiento {
+            color: #8996b7;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .resumen-rendimiento {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .tarjeta-rendimiento {
+            position: relative;
+            overflow: hidden;
+            background: #141e3c;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #8b5cf6;
+            transition: transform .2s ease, border-color .2s ease;
+        }
+
+        .tarjeta-rendimiento:hover {
+            transform: translateY(-3px);
+        }
+
+        .tarjeta-rendimiento span {
+            display: block;
+            color: #9ba8c8;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .5px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .tarjeta-rendimiento strong {
+            display: block;
+            font-family: 'Manrope', sans-serif;
+            font-size: 29px;
+            font-weight: 800;
+            color: #c4b5fd;
+        }
+
+        .tarjeta-rendimiento small {
+            display: block;
+            color: #7886a8;
+            font-size: 10px;
+            margin-top: 7px;
+            line-height: 1.5;
+        }
+
+        .tarjeta-correctas {
+            border-left-color: #22c55e;
+        }
+
+        .tarjeta-correctas strong {
+            color: #86efac;
+        }
+
+        .tarjeta-incorrectas {
+            border-left-color: #ef5350;
+        }
+
+        .tarjeta-incorrectas strong {
+            color: #fca5a5;
+        }
+
+        .tarjeta-parciales {
+            border-left-color: #f59e0b;
+        }
+
+        .tarjeta-parciales strong {
+            color: #fcd34d;
+        }
+
+        .tarjeta-pendientes {
+            border-left-color: #a78bfa;
+        }
+
+        .tarjeta-pendientes strong {
+            color: #c4b5fd;
+        }
+
+        .tarjeta-sin-responder {
+            border-left-color: #8492a6;
+        }
+
+        .tarjeta-sin-responder strong {
+            color: #cbd5e1;
+        }
+
+        .seccion-titulo {
+            font-family: 'Manrope', sans-serif;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 800;
+            margin: 32px 0 8px;
+        }
+
+        .descripcion-preguntas {
+            color: #8996b7;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .descripcion-preguntas strong {
+            color: #c4b5fd;
+        }
+
+        .pregunta {
+            background: linear-gradient(145deg, #151f3e, #111a35);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 16px;
+            padding: 23px;
+            margin-bottom: 17px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.12);
+        }
+
+        .pregunta-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 17px;
+        }
+
+        .numero {
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .tipo {
+            background: rgba(56,139,255,.12);
+            color: #93c5fd;
+            border: 1px solid rgba(56,139,255,.2);
+            border-radius: 30px;
+            padding: 7px 11px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .enunciado {
+            font-size: 14px;
+            line-height: 1.8;
+            font-weight: 700;
+            color: #f5f3ff;
+            margin-bottom: 19px;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+
+        .opcion {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 10px;
+            margin: 8px 0;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #cbd3e8;
+            background: rgba(255,255,255,.025);
+            overflow-wrap: anywhere;
+        }
+
+        .opcion.correcta {
+            background: rgba(34,197,94,.09);
+            border-color: rgba(34,197,94,.28);
+            color: #86efac;
+        }
+
+        .opcion.seleccionada {
+            border-color: rgba(56,139,255,.55);
+            background: rgba(56,139,255,.10);
+            color: #bfdbfe;
+            font-weight: 700;
+        }
+
+        .respuesta {
+            background: rgba(255,255,255,.035);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 11px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 12px;
+            line-height: 1.8;
+            color: #cbd3e8;
+            overflow-wrap: anywhere;
+        }
+
+        .respuesta strong {
+            display: block;
+            margin-bottom: 7px;
+            color: #a5b4fc;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .estado {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 13px;
+            padding: 7px 11px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .estado-correcto,
+        .estado-revisada {
+            background: rgba(34,197,94,.12);
+            color: #86efac;
+            border: 1px solid rgba(34,197,94,.2);
+        }
+
+        .estado-pendiente {
+            background: rgba(245,158,11,.12);
+            color: #fcd34d;
+            border: 1px solid rgba(245,158,11,.2);
+        }
+
+        .estado-sin-respuesta {
+            background: rgba(239,68,68,.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,.2);
+        }
+
+        .vacio {
+            background: rgba(17,26,53,.85);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 40px 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: #9ba8c8;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .vacio-icono {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        footer {
+            text-align: center;
+            color: #65718f;
+            font-size: 11px;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        @media (max-width: 850px) {
+            .resumen {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .resumen-rendimiento {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 20px 0;
+            }
+
+            .contenedor {
+                width: 94%;
+            }
+
+            .encabezado {
+                align-items: flex-start;
+            }
+
+            .boton-volver {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .resumen,
+            .resumen-rendimiento {
+                grid-template-columns: 1fr;
+            }
+
+            .dato,
+            .pregunta {
+                padding: 18px;
+            }
+
+            .titulo-rendimiento,
+            .seccion-titulo {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="contenedor">
+
+    <header class="encabezado">
+        <div>
+            <div class="marca">EDUNIVEL 2.0 · ADMINISTRACIÓN</div>
+            <h1>Detalle del intento</h1>
+            <p>Revisión de respuestas y rendimiento del estudiante</p>
+        </div>
+
+        <a th:href="@{/admin/evaluaciones/intentos}"
+           class="boton-volver">
+            ← Volver a intentos
+        </a>
+    </header>
+
+    <!-- INFORMACIÓN GENERAL DEL INTENTO -->
+    <section class="resumen">
+
+        <article class="dato">
+            <span>Estudiante</span>
+            <strong th:text="${intento.estudiante.usuario != null
+                ? intento.estudiante.usuario.nombreUsuario
+                : 'Sin usuario'}">
+                Estudiante
+            </strong>
+        </article>
+
+        <article class="dato">
+            <span>Materia</span>
+            <strong th:text="${intento.examen.area}">Materia</strong>
+        </article>
+
+        <article class="dato dato-calificacion">
+            <span>Calificación obtenida</span>
+            <strong>
+                <span th:text="${intento.puntajeObtenido != null
+                    ? intento.puntajeObtenido : 0}">0</span>
+                / 100 puntos
+            </strong>
+        </article>
+
+        <article class="dato">
+            <span>Fecha de inicio</span>
+            <strong th:text="${intento.fechaInicio != null
+                ? #temporals.format(intento.fechaInicio, 'dd/MM/yyyy HH:mm')
+                : 'No registrada'}">
+                Fecha
+            </strong>
+        </article>
+
+        <article class="dato">
+            <span>Fecha de finalización</span>
+            <strong th:text="${intento.fechaFin != null
+                ? #temporals.format(intento.fechaFin, 'dd/MM/yyyy HH:mm')
+                : 'No finalizado'}">
+                Fecha
+            </strong>
+        </article>
+
+        <article class="dato">
+            <span>Estado del intento</span>
+            <strong th:text="${intento.estado}">Estado</strong>
+        </article>
+
+    </section>
+
+    <!-- RESUMEN DEL RENDIMIENTO -->
+    <h2 class="titulo-rendimiento">Análisis del rendimiento</h2>
+    <p class="descripcion-rendimiento">
+        Indicadores generales del desempeño durante esta evaluación.
+    </p>
+
+    <section class="resumen-rendimiento">
+
+        <article class="tarjeta-rendimiento">
+            <span>RENDIMIENTO GENERAL</span>
+            <strong th:text="${porcentaje + '%'}">0%</strong>
+            <small>Porcentaje obtenido</small>
+        </article>
+
+        <article class="tarjeta-rendimiento tarjeta-correctas">
+            <span>RESPUESTAS CORRECTAS</span>
+            <strong th:text="${correctas}">0</strong>
+            <small>Preguntas con puntaje completo</small>
+        </article>
+
+        <article class="tarjeta-rendimiento tarjeta-incorrectas">
+            <span>RESPUESTAS INCORRECTAS</span>
+            <strong th:text="${incorrectas}">0</strong>
+            <small>Preguntas con cero puntos</small>
+        </article>
+
+        <article class="tarjeta-rendimiento tarjeta-parciales">
+            <span>RESPUESTAS PARCIALES</span>
+            <strong th:text="${parciales}">0</strong>
+            <small>Preguntas con puntaje parcial</small>
+        </article>
+
+        <article class="tarjeta-rendimiento tarjeta-pendientes">
+            <span>PENDIENTES DE REVISIÓN</span>
+            <strong th:text="${pendientes}">0</strong>
+            <small>Requieren evaluación docente</small>
+        </article>
+
+        <article class="tarjeta-rendimiento tarjeta-sin-responder">
+            <span>SIN RESPONDER</span>
+            <strong th:text="${sinResponder}">0</strong>
+            <small>Preguntas sin respuesta registrada</small>
+        </article>
+
+    </section>
+
+    <!-- DETALLE DE LAS RESPUESTAS -->
+    <h2 class="seccion-titulo">Respuestas del examen</h2>
+
+    <p class="descripcion-preguntas">
+        Preguntas registradas:
+        <strong th:text="${totalPreguntas}">0</strong>
+        · Respuestas guardadas:
+        <strong th:text="${totalRespuestas}">0</strong>
+    </p>
+
+    <div th:if="${#lists.isEmpty(preguntas)}" class="vacio">
+        <div class="vacio-icono">📝</div>
+        <strong>No hay preguntas registradas</strong>
+        <p>Este examen todavía no tiene preguntas registradas.</p>
+    </div>
+
+    <article class="pregunta"
+             th:each="pregunta, iter : ${preguntas}">
+
+        <div class="pregunta-cabecera">
+            <span class="numero"
+                  th:text="'PREGUNTA ' + ${iter.count}">
+                PREGUNTA 1
+            </span>
+
+            <span class="tipo" th:text="${pregunta.tipo}">
+                TIPO
+            </span>
+        </div>
+
+        <p class="enunciado"
+           th:text="${pregunta.enunciado}">
+            Enunciado
+        </p>
+
+        <div th:if="${pregunta.tipo == 'OPCION_MULTIPLE'
+                     or pregunta.tipo == 'VERDADERO_FALSO'}">
+
+            <div class="opcion"
+                 th:each="opcion : ${opcionesPorPregunta[pregunta.id]}"
+                 th:classappend="${opcion.esCorrecta ? ' correcta' : ''}
+                    + ${respuestaPorPregunta[pregunta.id] != null
+                    and respuestaPorPregunta[pregunta.id].idOpcionSeleccionada != null
+                    and respuestaPorPregunta[pregunta.id].idOpcionSeleccionada == opcion.id
+                    ? ' seleccionada' : ''}">
+
+                <span th:text="${opcion.textoOpcion}">Opción</span>
+
+                <span th:if="${opcion.esCorrecta}">
+                    ✓ Correcta
+                </span>
+
+                <span th:if="${respuestaPorPregunta[pregunta.id] != null
+                    and respuestaPorPregunta[pregunta.id].idOpcionSeleccionada != null
+                    and respuestaPorPregunta[pregunta.id].idOpcionSeleccionada == opcion.id}">
+                    · Seleccionada
+                </span>
+            </div>
+        </div>
+
+        <div class="respuesta">
+            <strong>Respuesta del estudiante:</strong>
+
+            <span th:if="${respuestaPorPregunta[pregunta.id] == null}">
+                Sin respuesta registrada.
+            </span>
+
+            <span th:if="${respuestaPorPregunta[pregunta.id] != null
+                and respuestaPorPregunta[pregunta.id].idOpcionSeleccionada == null}"
+                  th:text="${respuestaPorPregunta[pregunta.id].respuestaTexto != null
+                    and !#strings.isEmpty(respuestaPorPregunta[pregunta.id].respuestaTexto)
+                    ? respuestaPorPregunta[pregunta.id].respuestaTexto
+                    : 'Sin respuesta registrada.'}">
+            </span>
+
+            <th:block th:if="${respuestaPorPregunta[pregunta.id] != null
+                 and respuestaPorPregunta[pregunta.id].idOpcionSeleccionada != null}">
+
+                <span th:each="opcion : ${opcionesPorPregunta[pregunta.id]}"
+                      th:if="${opcion.id == respuestaPorPregunta[pregunta.id].idOpcionSeleccionada}"
+                      th:text="${opcion.textoOpcion}">
+                </span>
+
+            </th:block>
+        </div>
+
+        <div class="respuesta"
+             th:if="${pregunta.tipo == 'COMPLETAR'}">
+            <strong>Respuesta correcta aceptada:</strong>
+            <span th:text="${pregunta.respuestaCorrecta}">
+                Respuesta correcta
+            </span>
+        </div>
+
+        <div class="respuesta"
+             th:if="${pregunta.tipo == 'DESARROLLO'}">
+            <strong>Revisión docente:</strong>
+            <span>Esta pregunta requiere evaluación manual.</span>
+        </div>
+
+        <span class="estado estado-sin-respuesta"
+              th:if="${respuestaPorPregunta[pregunta.id] == null}">
+            ● Sin responder
+        </span>
+
+        <span class="estado estado-pendiente"
+              th:if="${respuestaPorPregunta[pregunta.id] != null
+                and respuestaPorPregunta[pregunta.id].pendienteRevision}">
+            ● Pendiente de revisión
+        </span>
+
+        <span class="estado estado-revisada"
+              th:if="${respuestaPorPregunta[pregunta.id] != null
+                and !respuestaPorPregunta[pregunta.id].pendienteRevision}">
+            ● Respuesta procesada
+        </span>
+
+    </article>
+
+</main>
+
+<footer>
+    EduNivel 2.0 · Panel de administración · Gestión 2026
+</footer>
+
+</body>
+</html>

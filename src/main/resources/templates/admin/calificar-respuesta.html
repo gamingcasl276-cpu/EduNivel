@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calificar respuesta | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(139, 92, 246, .16), transparent 32%),
+                radial-gradient(circle at 90% 15%, rgba(56, 139, 255, .12), transparent 30%),
+                #090d1c;
+            color: #f5f3ff;
+        }
+
+        .contenedor {
+            width: min(900px, 92%);
+            margin: 45px auto;
+        }
+
+        .encabezado {
+            margin-bottom: 28px;
+        }
+
+        .volver-superior {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #a78bfa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+        .volver-superior:hover {
+            color: #c4b5fd;
+            transform: translateX(-3px);
+        }
+
+        .encabezado h1 {
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(26px, 4vw, 34px);
+            font-weight: 800;
+            margin-bottom: 9px;
+        }
+
+        .subtitulo {
+            color: #a3acc8;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .etiqueta-superior {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(139, 92, 246, .28);
+            background: rgba(139, 92, 246, .12);
+            color: #c4b5fd;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        .tarjeta {
+            background: linear-gradient(145deg, rgba(25, 32, 65, .96), rgba(17, 26, 53, .96));
+            border: 1px solid rgba(255, 255, 255, .09);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 22px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .20);
+        }
+
+        .titulo-tarjeta {
+            font-family: 'Manrope', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .icono-titulo {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: rgba(139, 92, 246, .16);
+            font-size: 18px;
+        }
+
+        .materia {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 30px;
+            background: rgba(56, 139, 255, .13);
+            border: 1px solid rgba(56, 139, 255, .25);
+            color: #93c5fd;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        .bloque {
+            margin-bottom: 24px;
+        }
+
+        .bloque:last-child {
+            margin-bottom: 0;
+        }
+
+        .etiqueta {
+            display: block;
+            color: #a3acc8;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .valor {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.7;
+            color: #f5f3ff;
+        }
+
+        .contenido {
+            background: rgba(9, 13, 28, .58);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 13px;
+            padding: 19px;
+            line-height: 1.8;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            min-height: 65px;
+        }
+
+        .respuesta-estudiante {
+            border-left: 3px solid #8b5cf6;
+            background: rgba(139, 92, 246, .07);
+        }
+
+        .puntaje-maximo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 17px 19px;
+            border-radius: 13px;
+            background: rgba(245, 158, 11, .08);
+            border: 1px solid rgba(245, 158, 11, .20);
+        }
+
+        .puntaje-maximo .etiqueta {
+            margin: 0;
+        }
+
+        .numero-maximo {
+            color: #fbbf24;
+            font-family: 'Manrope', sans-serif;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .formulario label {
+            display: block;
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 11px;
+            color: #f5f3ff;
+        }
+
+        .formulario input {
+            width: 100%;
+            padding: 15px 16px;
+            background: rgba(9, 13, 28, .75);
+            border: 1px solid rgba(255, 255, 255, .13);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+        }
+
+        .formulario input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, .15);
+        }
+
+        .formulario input::placeholder {
+            color: #69738f;
+        }
+
+        .ayuda {
+            display: block;
+            color: #a3acc8;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .aviso {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+            padding: 17px;
+            margin-top: 23px;
+            border-radius: 13px;
+            background: rgba(56, 139, 255, .08);
+            border: 1px solid rgba(56, 139, 255, .20);
+            color: #bfdbfe;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .aviso-icono {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .botones {
+            display: flex;
+            gap: 13px;
+            flex-wrap: wrap;
+            margin-top: 27px;
+        }
+
+        .boton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border: none;
+            border-radius: 11px;
+            padding: 14px 21px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+
+        .guardar {
+            color: white;
+            background: linear-gradient(110deg, #8b5cf6, #388bff);
+            box-shadow: 0 7px 20px rgba(100, 90, 230, .22);
+        }
+
+        .guardar:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.12);
+            box-shadow: 0 10px 25px rgba(100, 90, 230, .30);
+        }
+
+        .volver {
+            color: #c4b5fd;
+            background: rgba(139, 92, 246, .12);
+            border: 1px solid rgba(139, 92, 246, .25);
+        }
+
+        .volver:hover {
+            background: rgba(139, 92, 246, .20);
+            transform: translateY(-2px);
+        }
+
+        .pie {
+            text-align: center;
+            color: #69738f;
+            font-size: 12px;
+            padding: 10px 0 25px;
+        }
+
+        @media(max-width: 600px) {
+            .contenedor {
+                margin: 25px auto;
+            }
+
+            .tarjeta {
+                padding: 21px;
+                border-radius: 16px;
+            }
+
+            .botones {
+                flex-direction: column;
+            }
+
+            .boton {
+                width: 100%;
+            }
+
+            .puntaje-maximo {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <header class="encabezado">
+
+        <a th:href="@{/admin/revision}" class="volver-superior">
+            ← Volver a respuestas pendientes
+        </a>
+
+        <div>
+            <span class="etiqueta-superior">✍️ Revisión académica</span>
+
+            <h1>Calificar respuesta</h1>
+
+            <p class="subtitulo">
+                Revisa el desarrollo del estudiante y asigna el puntaje correspondiente.
+            </p>
+        </div>
+
+    </header>
+
+    <section class="tarjeta">
+
+        <h2 class="titulo-tarjeta">
+            <span class="icono-titulo">📋</span>
+            Información de la respuesta
+        </h2>
+
+        <span class="materia"
+              th:text="${respuesta.pregunta.area}">
+            Materia
+        </span>
+
+        <div class="bloque">
+            <span class="etiqueta">Estudiante</span>
+
+            <p class="valor"
+               th:text="${respuesta.intento.estudiante.usuario.nombreUsuario}">
+                Estudiante
+            </p>
+        </div>
+
+        <div class="bloque">
+            <span class="etiqueta">Pregunta planteada</span>
+
+            <div class="contenido"
+                 th:text="${respuesta.pregunta.enunciado}">
+            </div>
+        </div>
+
+        <div class="bloque">
+            <span class="etiqueta">Respuesta del estudiante</span>
+
+            <div class="contenido respuesta-estudiante"
+                 th:text="${respuesta.respuestaTexto}">
+            </div>
+        </div>
+
+        <div class="puntaje-maximo">
+
+            <div>
+                <span class="etiqueta">Puntaje máximo disponible</span>
+                <p class="valor">Valor máximo de esta pregunta</p>
+            </div>
+
+            <span class="numero-maximo">
+                <span th:text="${respuesta.pregunta.puntaje}">0</span>
+                pts
+            </span>
+
+        </div>
+
+    </section>
+
+    <section class="tarjeta formulario">
+
+        <h2 class="titulo-tarjeta">
+            <span class="icono-titulo">🎯</span>
+            Asignar calificación
+        </h2>
+
+        <form method="post"
+              th:action="@{/admin/revision/{id}/calificar(id=${respuesta.id})}"
+              onsubmit="return validarPuntaje();">
+
+            <label for="puntaje">
+                Puntaje obtenido
+            </label>
+
+            <input
+                type="number"
+                id="puntaje"
+                name="puntaje"
+                min="0"
+                th:max="${respuesta.pregunta.puntaje}"
+                step="0.01"
+                placeholder="Ejemplo: 8.50"
+                required
+            >
+
+            <span class="ayuda">
+                Puedes asignar desde 0 hasta
+                <strong th:text="${respuesta.pregunta.puntaje}">0</strong>
+                puntos. Utiliza hasta dos decimales.
+            </span>
+
+            <div class="aviso">
+                <span class="aviso-icono">💡</span>
+
+                <div>
+                    <strong>Revisión manual</strong><br>
+                    Verifica que la respuesta cumpla con lo solicitado
+                    antes de asignar el puntaje. La calificación se guardará
+                    al confirmar el formulario.
+                </div>
+            </div>
+
+            <div class="botones">
+
+                <button type="submit" class="boton guardar">
+                    ✓ Guardar calificación
+                </button>
+
+                <a th:href="@{/admin/revision}"
+                   class="boton volver">
+                    ← Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <footer class="pie">
+        EduNivel 2.0 · Panel administrativo · 2026
+    </footer>
+
+</div>
+
+<script>
+    function validarPuntaje() {
+
+        const campo = document.getElementById("puntaje");
+        const minimo = Number(campo.min);
+        const maximo = Number(campo.max);
+        const valor = Number(campo.value);
+
+        if (
+            !Number.isFinite(valor) ||
+            valor < minimo ||
+            valor > maximo
+        ) {
+            alert("Ingresa un puntaje válido dentro del rango permitido.");
+            campo.focus();
+            return false;
+        }
+
+        const decimales = campo.value.split(".")[1];
+
+        if (decimales && decimales.length > 2) {
+            alert("El puntaje puede tener como máximo dos decimales.");
+            campo.focus();
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+</html>

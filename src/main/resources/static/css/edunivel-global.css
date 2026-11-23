@@ -1,0 +1,144 @@
+
+/* =========================================
+   EDUNIVEL 2.0 - IDENTIDAD VISUAL GLOBAL
+   ========================================= */
+
+:root {
+    --en-bg: #090d1c;
+    --en-bg-soft: #10162f;
+    --en-surface: #192041;
+    --en-surface-soft: #111a35;
+    --en-purple: #8b5cf6;
+    --en-purple-light: #a78bfa;
+    --en-blue: #388bff;
+    --en-cyan: #22d3ee;
+    --en-orange: #f59e0b;
+    --en-text: #f5f3ff;
+    --en-muted: #a3acc8;
+    --en-border: rgba(255,255,255,.09);
+    --en-gradient: linear-gradient(110deg, #8b5cf6, #388bff);
+    --en-shadow: 0 12px 35px rgba(0,0,0,.22);
+}
+
+/* BASE GENERAL */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+    background-color: var(--en-bg);
+    color: var(--en-text);
+}
+
+/* TITULOS */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+}
+
+/* ENLACES */
+
+a {
+    transition: color .2s ease, background .2s ease,
+                border-color .2s ease, transform .2s ease;
+}
+
+/* BOTONES COMUNES */
+
+button,
+input[type="submit"],
+input[type="button"],
+.btn,
+.boton {
+    font-family: inherit;
+    transition: all .25s ease;
+}
+
+/* BOTONES PRINCIPALES */
+
+.btn-primary,
+button[type="submit"],
+input[type="submit"],
+.boton-principal {
+    background: var(--en-gradient);
+    color: #fff;
+    border-color: transparent;
+    font-weight: 700;
+}
+
+/* EFECTOS */
+
+.btn:hover,
+.boton:hover,
+button:hover,
+input[type="submit"]:hover {
+    filter: brightness(1.10);
+}
+
+/* CAMPOS DE FORMULARIO */
+
+input,
+select,
+textarea {
+    font-family: inherit;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--en-purple);
+    box-shadow: 0 0 0 3px rgba(139,92,246,.15);
+}
+
+/* SELECCIÓN DE TEXTO */
+
+::selection {
+    background: rgba(139,92,246,.45);
+    color: #fff;
+}
+
+/* BARRA DE DESPLAZAMIENTO */
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #6650ad #10162f;
+}
+
+*::-webkit-scrollbar {
+    width: 9px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #10162f;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #6650ad;
+    border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #8b5cf6;
+}
+
+/* IMAGENES RESPONSIVAS */
+
+img {
+    max-width: 100%;
+}
+
+/* MOVIMIENTO REDUCIDO */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+    }
+}

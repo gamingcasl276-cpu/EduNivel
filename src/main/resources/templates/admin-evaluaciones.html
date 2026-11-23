@@ -1,0 +1,655 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administración de evaluaciones | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        :root {
+            --fondo: #090d1c;
+            --panel: #141b35;
+            --panel-claro: #202b50;
+            --texto: #f5f3ff;
+            --muted: #a3acc8;
+            --morado: #965cff;
+            --azul: #388bff;
+            --naranja: #ff9d42;
+            --verde: #35d39a;
+            --borde: rgba(255,255,255,.09);
+            --gradiente: linear-gradient(110deg,#965cff,#388bff);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background:
+                radial-gradient(circle at 10% 0%,rgba(150,92,255,.13),transparent 28%),
+                radial-gradient(circle at 95% 15%,rgba(56,139,255,.09),transparent 25%),
+                var(--fondo);
+            color: var(--texto);
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(14,20,43,.94);
+            border-bottom: 1px solid var(--borde);
+            padding: 19px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .marca {
+            font-family: 'Manrope', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -.8px;
+        }
+
+        .marca span {
+            background: var(--gradiente);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .volver {
+            color: #e4e8f7;
+            text-decoration: none;
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--borde);
+            padding: 11px 17px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .volver:hover {
+            background: rgba(150,92,255,.15);
+            border-color: rgba(150,92,255,.4);
+            transform: translateY(-2px);
+        }
+
+        main {
+            width: min(1200px,92%);
+            margin: 38px auto;
+        }
+
+        .encabezado {
+            margin-bottom: 28px;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            color: #c8adff;
+            background: rgba(150,92,255,.13);
+            border: 1px solid rgba(150,92,255,.23);
+            padding: 7px 12px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+
+        .encabezado h1 {
+            font-family: 'Manrope',sans-serif;
+            font-size: 30px;
+            margin-bottom: 9px;
+            letter-spacing: -.8px;
+        }
+
+        .encabezado p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 14px;
+            max-width: 650px;
+        }
+
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .estadistica {
+            position: relative;
+            overflow: hidden;
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 23px;
+            border: 1px solid var(--borde);
+            box-shadow: 0 10px 30px rgba(0,0,0,.14);
+        }
+
+        .estadistica::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            right: -30px;
+            top: -35px;
+            background: rgba(150,92,255,.09);
+        }
+
+        .estadistica:nth-child(2)::after {
+            background: rgba(53,211,154,.10);
+        }
+
+        .estadistica:nth-child(3)::after {
+            background: rgba(255,157,66,.10);
+        }
+
+        .estadistica span {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .estadistica h2 {
+            font-family: 'Manrope',sans-serif;
+            font-size: 34px;
+            margin-top: 11px;
+            font-weight: 800;
+        }
+
+        .estadistica:nth-child(2) h2 {
+            color: var(--verde);
+        }
+
+        .estadistica:nth-child(3) h2 {
+            color: var(--naranja);
+        }
+
+        .accesos-rapidos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: linear-gradient(110deg,rgba(150,92,255,.15),rgba(56,139,255,.09));
+            border: 1px solid rgba(150,92,255,.24);
+            padding: 23px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+        }
+
+        .accesos-rapidos h3 {
+            font-family: 'Manrope',sans-serif;
+            color: var(--texto);
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .accesos-rapidos p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .boton-intentos {
+            display: inline-block;
+            white-space: nowrap;
+            background: var(--gradiente);
+            color: white;
+            text-decoration: none;
+            padding: 13px 19px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            transition: .2s;
+        }
+
+        .boton-intentos:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(150,92,255,.25);
+        }
+
+        .seccion {
+            background: var(--panel);
+            border-radius: 17px;
+            padding: 26px;
+            border: 1px solid var(--borde);
+            box-shadow: 0 10px 30px rgba(0,0,0,.13);
+        }
+
+        .seccion h2 {
+            font-family: 'Manrope',sans-serif;
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+        .descripcion {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 23px;
+        }
+
+        .mensaje {
+            background: rgba(53,211,154,.12);
+            color: #6ee7b7;
+            border: 1px solid rgba(53,211,154,.22);
+            padding: 13px 16px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .error {
+            background: rgba(248,113,113,.12);
+            color: #fca5a5;
+            border: 1px solid rgba(248,113,113,.22);
+            padding: 13px 16px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .tabla-contenedor {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            text-align: left;
+            background: #202b50;
+            color: #b6c0dd;
+            padding: 16px 13px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        td {
+            padding: 17px 13px;
+            border-bottom: 1px solid var(--borde);
+            font-size: 13px;
+            color: #dce2f5;
+        }
+
+        tbody tr {
+            transition: background .2s;
+        }
+
+        tbody tr:hover {
+            background: rgba(150,92,255,.055);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .materia {
+            font-weight: 800;
+            color: white;
+        }
+
+        .dato {
+            color: var(--muted);
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .activo {
+            background: rgba(53,211,154,.12);
+            color: #6ee7b7;
+            border: 1px solid rgba(53,211,154,.2);
+        }
+
+        .inactivo {
+            background: rgba(255,157,66,.12);
+            color: #ffc17f;
+            border: 1px solid rgba(255,157,66,.2);
+        }
+
+        .boton {
+            border: none;
+            border-radius: 8px;
+            padding: 9px 13px;
+            font-family: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 11px;
+            transition: .2s;
+        }
+
+        .boton:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.12);
+        }
+
+        .desactivar {
+            background: rgba(255,157,66,.13);
+            color: #ffc17f;
+            border: 1px solid rgba(255,157,66,.2);
+        }
+
+        .activar {
+            background: rgba(53,211,154,.13);
+            color: #6ee7b7;
+            border: 1px solid rgba(53,211,154,.2);
+        }
+
+        .vacio {
+            padding: 40px 15px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .vacio h3 {
+            color: var(--texto);
+            margin-bottom: 9px;
+            font-size: 17px;
+        }
+
+        .nota {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(56,139,255,.09);
+            border: 1px solid rgba(56,139,255,.19);
+            border-radius: 11px;
+            color: #a9caff;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .nota strong {
+            color: #d4e5ff;
+        }
+
+        footer {
+            text-align: center;
+            color: #727e9e;
+            padding: 30px;
+            font-size: 12px;
+            border-top: 1px solid var(--borde);
+            margin-top: 55px;
+        }
+
+        @media(max-width:850px) {
+            .estadisticas {
+                grid-template-columns: repeat(2,1fr);
+            }
+        }
+
+        @media(max-width:600px) {
+            header {
+                padding: 17px 5%;
+            }
+
+            .marca {
+                font-size: 21px;
+            }
+
+            main {
+                margin: 25px auto;
+                width: 92%;
+            }
+
+            .encabezado h1 {
+                font-size: 24px;
+            }
+
+            .estadisticas {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .estadistica {
+                padding: 19px;
+            }
+
+            .estadistica h2 {
+                font-size: 29px;
+            }
+
+            .accesos-rapidos {
+                padding: 19px;
+            }
+
+            .boton-intentos {
+                width: 100%;
+                text-align: center;
+            }
+
+            .seccion {
+                padding: 17px;
+            }
+
+            .volver {
+                padding: 9px 12px;
+                font-size: 12px;
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            *,*::before,*::after {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="marca">Edu<span>Nivel</span> 2.0</div>
+
+    <a class="volver" th:href="@{/admin}">
+        ← Volver al panel
+    </a>
+</header>
+
+<main>
+
+    <section class="encabezado">
+        <div class="etiqueta">PANEL ADMINISTRATIVO</div>
+
+        <h1>Administración de evaluaciones</h1>
+
+        <p>
+            Gestiona los exámenes de 6to de secundaria,
+            consulta sus preguntas y controla su disponibilidad.
+        </p>
+    </section>
+
+    <section class="estadisticas">
+
+        <article class="estadistica">
+            <span>Total de evaluaciones</span>
+            <h2 th:text="${totalExamenes}">0</h2>
+        </article>
+
+        <article class="estadistica">
+            <span>Evaluaciones activas</span>
+            <h2 th:text="${examenesActivos}">0</h2>
+        </article>
+
+        <article class="estadistica">
+            <span>Evaluaciones inactivas</span>
+            <h2 th:text="${examenesInactivos}">0</h2>
+        </article>
+
+    </section>
+
+    <section class="accesos-rapidos">
+
+        <div>
+            <h3>📋 Historial de intentos de estudiantes</h3>
+            <p>
+                Consulta los intentos realizados, sus calificaciones
+                y revisa las respuestas individualmente.
+            </p>
+        </div>
+
+        <a th:href="@{/admin/evaluaciones/intentos}"
+           class="boton-intentos">
+            Ver intentos →
+        </a>
+
+    </section>
+
+    <section class="seccion">
+
+        <h2>Evaluaciones por materia</h2>
+
+        <p class="descripcion">
+            Gestión académica 2026 · 6to de secundaria
+        </p>
+
+        <div th:if="${mensaje}" class="mensaje"
+             th:text="${mensaje}"></div>
+
+        <div th:if="${error}" class="error"
+             th:text="${error}"></div>
+
+        <div class="tabla-contenedor">
+
+            <table th:if="${!examenes.isEmpty()}">
+
+                <thead>
+                    <tr>
+                        <th>Materia</th>
+                        <th>Duración</th>
+                        <th>Puntaje</th>
+                        <th>Preguntas</th>
+                        <th>Intentos finalizados</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="examen : ${examenes}">
+
+                        <td class="materia"
+                            th:text="${examen.area}">
+                            Matemáticas
+                        </td>
+
+                        <td class="dato">
+                            <span th:text="${examen.duracionMinutos}">45</span>
+                            min
+                        </td>
+
+                        <td class="dato">
+                            <span th:text="${examen.puntajeTotal}">100</span>
+                            pts
+                        </td>
+
+                        <td class="dato"
+                            th:text="${preguntasPorExamen[examen.id]}">
+                            0
+                        </td>
+
+                        <td class="dato"
+                            th:text="${intentosPorExamen[examen.id]}">
+                            0
+                        </td>
+
+                        <td>
+                            <span th:if="${examen.activo}"
+                                  class="estado activo">
+                                Activo
+                            </span>
+
+                            <span th:unless="${examen.activo}"
+                                  class="estado inactivo">
+                                Inactivo
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <form th:action="@{/admin/evaluaciones/estado}"
+                                  method="post">
+
+                                <input type="hidden"
+                                       name="examenId"
+                                       th:value="${examen.id}">
+
+                                <input type="hidden"
+                                       name="activo"
+                                       th:value="${!examen.activo}">
+
+                                <button type="submit"
+                                        th:class="${examen.activo}
+                                            ? 'boton desactivar'
+                                            : 'boton activar'"
+                                        th:text="${examen.activo}
+                                            ? 'Desactivar'
+                                            : 'Activar'"
+                                        onclick="return confirm('¿Confirmas cambiar el estado de esta evaluación?');">
+                                    Cambiar
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <div class="vacio" th:if="${examenes.isEmpty()}">
+                <h3>No hay evaluaciones registradas</h3>
+                <p>Comprueba la configuración de los exámenes de 2026.</p>
+            </div>
+
+        </div>
+
+        <div class="nota">
+            <strong>Importante:</strong>
+            desactivar una evaluación impide que los estudiantes
+            inicien nuevos intentos. Las preguntas, calificaciones
+            y el historial existente se conservan.
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    EduNivel 2.0 · Panel de administración · 2026
+</footer>
+
+</body>
+</html>

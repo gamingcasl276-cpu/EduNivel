@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crear cuenta | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel.css}">
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 35px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            color: #f5f3ff;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(139,92,246,.20), transparent 32%),
+                radial-gradient(circle at 85% 85%, rgba(56,139,255,.16), transparent 32%),
+                #0b1020;
+        }
+
+        .pagina {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 20px;
+            color: #aaa8c4;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .volver:hover {
+            color: #ffffff;
+            transform: translateX(-3px);
+        }
+
+        .contenedor {
+            width: 100%;
+            padding: 38px;
+            border: 1px solid rgba(177,159,255,.14);
+            border-radius: 24px;
+            background: linear-gradient(145deg, #19192f, #12182c);
+            box-shadow: 0 25px 75px rgba(0,0,0,.35);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icono {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            border-radius: 18px;
+            color: white;
+            font-family: 'Manrope', sans-serif;
+            font-size: 25px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #9565ff, #428dff);
+            box-shadow: 0 10px 25px rgba(139,92,246,.25);
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-family: 'Manrope', sans-serif;
+            font-size: 29px;
+            font-weight: 800;
+            letter-spacing: -.8px;
+            color: #ffffff;
+        }
+
+        .logo h1 span {
+            color: #a78bfa;
+        }
+
+        .logo p {
+            margin: 8px 0 0;
+            color: #929ab8;
+            font-size: 13px;
+        }
+
+        .etiqueta {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 11px;
+            margin-bottom: 13px;
+            border: 1px solid rgba(139,92,246,.22);
+            border-radius: 30px;
+            background: rgba(139,92,246,.10);
+            color: #c4b5fd;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .titulo {
+            margin: 0 0 8px;
+            color: #ffffff;
+            font-family: 'Manrope', sans-serif;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .descripcion {
+            margin: 0 0 27px;
+            color: #929ab8;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .seccion-titulo {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 25px 0 16px;
+            padding-bottom: 11px;
+            border-bottom: 1px solid rgba(177,159,255,.12);
+            color: #d9d5f5;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .seccion-titulo:first-of-type {
+            margin-top: 0;
+        }
+
+        .seccion-numero {
+            width: 23px;
+            height: 23px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 7px;
+            background: rgba(139,92,246,.18);
+            color: #c4b5fd;
+            font-size: 11px;
+        }
+
+        .grupo {
+            margin-bottom: 17px;
+        }
+
+        .grupo label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e6e3f5;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .grupo input {
+            width: 100%;
+            min-height: 47px;
+            padding: 12px 14px;
+            border: 1px solid rgba(177,159,255,.17);
+            border-radius: 11px;
+            outline: none;
+            background: #10162a;
+            color: #ffffff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .grupo input::placeholder {
+            color: #69728e;
+        }
+
+        .grupo input:focus {
+            border-color: #9565ff;
+            box-shadow: 0 0 0 3px rgba(149,101,255,.13);
+            background: #141b33;
+        }
+
+        .grupo input:focus-visible {
+            outline: none;
+        }
+
+        .fila {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .ayuda {
+            margin: 7px 0 0;
+            color: #818ba8;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .nota-codigo {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 5px 0 20px;
+            padding: 12px;
+            border: 1px solid rgba(56,139,255,.17);
+            border-radius: 10px;
+            background: rgba(56,139,255,.07);
+            color: #a9b8d9;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .nota-codigo span {
+            color: #70a9ff;
+            font-size: 16px;
+        }
+
+        .error {
+            margin-bottom: 17px;
+            padding: 13px 14px;
+            border: 1px solid rgba(255,100,100,.25);
+            border-radius: 10px;
+            background: rgba(220,60,60,.10);
+            color: #ffaaaa;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .boton {
+            width: 100%;
+            min-height: 50px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(110deg, #9565ff, #428dff);
+            color: #ffffff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .25s;
+            box-shadow: 0 9px 24px rgba(100,80,220,.20);
+        }
+
+        .boton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 13px 30px rgba(100,80,220,.32);
+            filter: brightness(1.08);
+        }
+
+        .inferior {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(177,159,255,.12);
+            text-align: center;
+            color: #929ab8;
+            font-size: 12px;
+        }
+
+        .inferior a {
+            color: #b9a4ff;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .inferior a:hover {
+            color: #ffffff;
+        }
+
+        .seguridad {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            margin-top: 22px;
+            color: #727d9b;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        @media(max-width: 520px) {
+            body {
+                padding: 20px 12px;
+                align-items: flex-start;
+            }
+
+            .contenedor {
+                padding: 27px 20px;
+                border-radius: 19px;
+            }
+
+            .logo {
+                margin-bottom: 25px;
+            }
+
+            .logo h1 {
+                font-size: 26px;
+            }
+
+            .titulo {
+                font-size: 21px;
+            }
+
+            .fila {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        @media(max-width: 350px) {
+            .contenedor {
+                padding: 23px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="pagina">
+
+    <a class="volver" th:href="@{/login}">
+        ← Volver al inicio de sesión
+    </a>
+
+    <main class="contenedor">
+
+        <div class="logo">
+            <div class="logo-icono">E</div>
+            <h1>Edu<span>Nivel</span> <small style="font-size:13px;color:#929ab8;">2.0</small></h1>
+            <p>Aprende, progresa y alcanza tu potencial</p>
+        </div>
+
+        <div class="etiqueta">
+            <span>✦</span> Registro de estudiante
+        </div>
+
+        <h2 class="titulo">Crea tu cuenta</h2>
+
+        <p class="descripcion">
+            Completa tus datos para formar parte de EduNivel y comenzar tu progreso académico.
+        </p>
+
+        <!-- Mensajes de error -->
+
+        <div class="error"
+             th:if="${error}"
+             th:text="${error}">
+        </div>
+
+        <div class="error"
+             th:if="${#fields.hasErrors('*')}"
+             th:each="err : ${#fields.allErrors()}"
+             th:text="${err}">
+        </div>
+
+        <form th:action="@{/registro}"
+              th:object="${registroDTO}"
+              method="post">
+
+            <div class="seccion-titulo">
+                <span class="seccion-numero">01</span>
+                Datos de acceso
+            </div>
+
+            <div class="grupo">
+                <label for="codigoInvitacion">Código de invitación</label>
+                <input type="text"
+                       id="codigoInvitacion"
+                       th:field="*{codigoInvitacion}"
+                       placeholder="Introduce tu código de invitación"
+                       autocomplete="off"
+                       required>
+                <p class="ayuda">Solicita tu código de invitación al administrador.</p>
+            </div>
+
+            <div class="grupo">
+                <label for="nombreUsuario">Nombre de usuario</label>
+                <input type="text"
+                       id="nombreUsuario"
+                       th:field="*{nombreUsuario}"
+                       placeholder="Ejemplo: estudiante01"
+                       minlength="4"
+                       maxlength="50"
+                       autocomplete="username"
+                       required>
+            </div>
+
+            <div class="grupo">
+                <label for="contrasena">Contraseña</label>
+                <input type="password"
+                       id="contrasena"
+                       th:field="*{contrasena}"
+                       placeholder="Mínimo 8 caracteres"
+                       minlength="8"
+                       maxlength="72"
+                       autocomplete="new-password"
+                       required>
+                <p class="ayuda">Utiliza una contraseña segura de al menos 8 caracteres.</p>
+            </div>
+
+            <div class="seccion-titulo">
+                <span class="seccion-numero">02</span>
+                Información académica
+            </div>
+
+            <div class="grupo">
+                <label for="codigoEstudiante">Código del estudiante</label>
+                <input type="text"
+                       id="codigoEstudiante"
+                       th:field="*{codigoEstudiante}"
+                       placeholder="Ejemplo: EST001"
+                       maxlength="20"
+                       required>
+            </div>
+
+            <div class="grupo">
+                <label for="curso">Curso</label>
+                <input type="text"
+                       id="curso"
+                       th:field="*{curso}"
+                       placeholder="Ejemplo: 6to de secundaria"
+                       maxlength="30"
+                       required>
+            </div>
+
+            <div class="fila">
+
+                <div class="grupo">
+                    <label for="paralelo">Paralelo</label>
+                    <input type="text"
+                           id="paralelo"
+                           th:field="*{paralelo}"
+                           placeholder="Ejemplo: A"
+                           maxlength="10">
+                </div>
+
+                <div class="grupo">
+                    <label for="gestion">Gestión</label>
+                    <input type="text"
+                           id="gestion"
+                           th:field="*{gestion}"
+                           placeholder="Ejemplo: 2026"
+                           maxlength="10"
+                           required>
+                </div>
+
+            </div>
+
+            <div class="nota-codigo">
+                <span>ℹ</span>
+                <div>
+                    Verifica que tus datos académicos sean correctos antes de crear tu cuenta.
+                </div>
+            </div>
+
+            <button type="submit" class="boton">
+                Crear mi cuenta →
+            </button>
+
+        </form>
+
+        <div class="inferior">
+            ¿Ya tienes una cuenta?
+            <a th:href="@{/login}">Iniciar sesión</a>
+        </div>
+
+        <div class="seguridad">
+            <span>🔒</span>
+            EduNivel 2.0 · Tus datos se procesan de forma segura.
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

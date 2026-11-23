@@ -1,0 +1,773 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Banco de preguntas | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background:
+                radial-gradient(ellipse at 10% 0%, rgba(139,92,246,.15), transparent 35%),
+                radial-gradient(ellipse at 90% 20%, rgba(56,139,255,.10), transparent 35%),
+                #090d1c;
+            color: #f5f3ff;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(16,22,47,.94);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            padding: 21px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            backdrop-filter: blur(15px);
+        }
+
+        .marca {
+            font-family: 'Manrope', sans-serif;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+        }
+
+        .marca span {
+            background: linear-gradient(110deg, #a78bfa, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .submarca {
+            display: block;
+            color: #8794b5;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #c4b5fd;
+            text-decoration: none;
+            border: 1px solid rgba(139,92,246,.3);
+            background: rgba(139,92,246,.12);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            transition: all .2s ease;
+        }
+
+        .back:hover {
+            background: rgba(139,92,246,.23);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        main {
+            width: 92%;
+            max-width: 950px;
+            margin: 38px auto;
+        }
+
+        .intro {
+            margin-bottom: 26px;
+        }
+
+        .intro .eyebrow {
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            margin-bottom: 10px;
+        }
+
+        .intro h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(25px, 4vw, 33px);
+            font-weight: 800;
+            letter-spacing: -.8px;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            color: #9ba8c8;
+            font-size: 13px;
+            line-height: 1.8;
+            max-width: 650px;
+        }
+
+        .intro-info {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .info-chip {
+            background: rgba(56,139,255,.10);
+            border: 1px solid rgba(56,139,255,.2);
+            color: #93c5fd;
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .card {
+            background: rgba(17,26,53,.88);
+            border: 1px solid rgba(255,255,255,.09);
+            padding: 29px;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,.20);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 22px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
+
+        .card-icon {
+            width: 47px;
+            height: 47px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 13px;
+            background: rgba(139,92,246,.15);
+            border: 1px solid rgba(139,92,246,.25);
+            font-size: 22px;
+        }
+
+        .card-header h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .card-header p {
+            color: #8996b7;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .success, .error {
+            padding: 14px 16px;
+            border-radius: 11px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .success {
+            background: rgba(34,197,94,.12);
+            color: #86efac;
+            border: 1px solid rgba(34,197,94,.25);
+        }
+
+        .error {
+            background: rgba(239,68,68,.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,.25);
+        }
+
+        .field {
+            margin-bottom: 21px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 9px;
+            font-size: 12px;
+            color: #dce3f5;
+        }
+
+        .required {
+            color: #f87171;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid rgba(255,255,255,.11);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            background: #101a36;
+            color: #f5f3ff;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #71809f;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139,92,246,.13);
+        }
+
+        select option {
+            background: #101a36;
+            color: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.7;
+        }
+
+        .field-help {
+            display: block;
+            margin-top: 7px;
+            color: #7886a8;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .section-type {
+            padding: 22px;
+            background: linear-gradient(145deg, rgba(139,92,246,.09), rgba(56,139,255,.045));
+            border: 1px solid rgba(139,92,246,.20);
+            border-radius: 14px;
+            margin-bottom: 23px;
+            animation: aparecer .25s ease;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(7px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-type h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .help {
+            color: #9ba8c8;
+            font-size: 11px;
+            line-height: 1.7;
+            margin-bottom: 19px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .options .field {
+            margin-bottom: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .option-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 23px;
+            height: 23px;
+            border-radius: 7px;
+            background: rgba(139,92,246,.17);
+            color: #c4b5fd;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .correct {
+            background: rgba(34,197,94,.07);
+            border: 1px solid rgba(34,197,94,.20);
+            border-radius: 12px;
+            padding: 17px;
+            margin-top: 17px;
+        }
+
+        .correct label {
+            color: #86efac;
+        }
+
+        .correct select {
+            border-color: rgba(34,197,94,.2);
+        }
+
+        .puntaje-box {
+            background: rgba(56,139,255,.07);
+            border: 1px solid rgba(56,139,255,.18);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 23px;
+        }
+
+        .puntaje-box label {
+            color: #93c5fd;
+        }
+
+        .save {
+            width: 100%;
+            border: none;
+            background: linear-gradient(110deg, #7045d8, #386fe0);
+            color: white;
+            padding: 16px;
+            border-radius: 11px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
+
+        .save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 22px rgba(112,69,216,.3);
+            filter: brightness(1.1);
+        }
+
+        .save:active {
+            transform: translateY(0);
+        }
+
+        .save:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .nota {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+            background: rgba(245,158,11,.07);
+            border: 1px solid rgba(245,158,11,.17);
+            border-radius: 11px;
+            padding: 14px;
+            margin-bottom: 23px;
+        }
+
+        .nota span {
+            font-size: 17px;
+        }
+
+        .nota p {
+            color: #fcd34d;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 15px;
+            color: #65718f;
+            font-size: 11px;
+        }
+
+        @media(max-width: 650px) {
+            main {
+                width: 94%;
+                margin: 27px auto;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .section-type {
+                padding: 17px;
+            }
+
+            .intro h2 {
+                font-size: 24px;
+            }
+
+            header {
+                padding: 17px 5%;
+            }
+
+            .marca {
+                font-size: 19px;
+            }
+
+            .back {
+                font-size: 11px;
+                padding: 9px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <div class="marca">Edu<span>Nivel</span> 2.0</div>
+        <small class="submarca">Administración · Banco de preguntas</small>
+    </div>
+
+    <a class="back" th:href="@{/admin}">
+        ← Volver al panel
+    </a>
+</header>
+
+<main>
+
+    <section class="intro">
+        <div class="eyebrow">CONTENIDO ACADÉMICO</div>
+
+        <h2>Gestión de preguntas</h2>
+
+        <p>
+            Crea y organiza preguntas para las evaluaciones diagnósticas
+            de sexto de secundaria. Selecciona la materia, define el tipo
+            de pregunta y establece su puntaje.
+        </p>
+
+        <div class="intro-info">
+            <span class="info-chip">5 materias académicas</span>
+            <span class="info-chip">4 tipos de preguntas</span>
+            <span class="info-chip">Gestión 2026</span>
+        </div>
+    </section>
+
+    <section class="card">
+
+        <div class="card-header">
+            <div class="card-icon">📝</div>
+
+            <div>
+                <h3>Nueva pregunta</h3>
+                <p>Completa los datos para registrar una pregunta.</p>
+            </div>
+        </div>
+
+        <div th:if="${mensaje}" class="success"
+             th:text="${mensaje}"></div>
+
+        <div th:if="${error}" class="error"
+             th:text="${error}"></div>
+
+        <form th:action="@{/admin/preguntas/guardar}"
+              method="post"
+              id="formPregunta">
+
+            <!-- MATERIA -->
+            <div class="field">
+                <label for="examenId">
+                    Materia académica <span class="required">*</span>
+                </label>
+
+                <select id="examenId" name="examenId" required>
+                    <option value="">Selecciona una materia</option>
+
+                    <option th:each="examen : ${examenes}"
+                            th:value="${examen.id}"
+                            th:text="${examen.area}">
+                    </option>
+                </select>
+
+                <small class="field-help">
+                    Selecciona el examen al que pertenecerá esta pregunta.
+                </small>
+            </div>
+
+            <!-- TIPO DE PREGUNTA -->
+            <div class="field">
+                <label for="tipo">
+                    Tipo de pregunta <span class="required">*</span>
+                </label>
+
+                <select id="tipo" name="tipo" required>
+                    <option value="OPCION_MULTIPLE">Opción múltiple</option>
+                    <option value="VERDADERO_FALSO">Verdadero o falso</option>
+                    <option value="COMPLETAR">Completar espacios</option>
+                    <option value="DESARROLLO">Desarrollo</option>
+                </select>
+            </div>
+
+            <!-- ENUNCIADO -->
+            <div class="field">
+                <label for="enunciado">
+                    Enunciado de la pregunta <span class="required">*</span>
+                </label>
+
+                <textarea id="enunciado"
+                          name="enunciado"
+                          placeholder="Escribe aquí la pregunta..."
+                          required></textarea>
+
+                <small class="field-help">
+                    Redacta una pregunta clara y comprensible para el estudiante.
+                </small>
+            </div>
+
+            <!-- OPCION MULTIPLE -->
+            <section id="seccionMultiple" class="section-type">
+
+                <h3>🔠 Alternativas de respuesta</h3>
+
+                <p class="help">
+                    Escribe las cuatro alternativas y selecciona cuál
+                    es la respuesta correcta.
+                </p>
+
+                <div class="options">
+
+                    <div class="field">
+                        <label for="opcionA" class="option-label">
+                            <span class="option-letter">A</span>
+                            Alternativa A
+                        </label>
+
+                        <input id="opcionA" name="opcionA"
+                               placeholder="Escribe la respuesta A"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label for="opcionB" class="option-label">
+                            <span class="option-letter">B</span>
+                            Alternativa B
+                        </label>
+
+                        <input id="opcionB" name="opcionB"
+                               placeholder="Escribe la respuesta B"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label for="opcionC" class="option-label">
+                            <span class="option-letter">C</span>
+                            Alternativa C
+                        </label>
+
+                        <input id="opcionC" name="opcionC"
+                               placeholder="Escribe la respuesta C"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label for="opcionD" class="option-label">
+                            <span class="option-letter">D</span>
+                            Alternativa D
+                        </label>
+
+                        <input id="opcionD" name="opcionD"
+                               placeholder="Escribe la respuesta D"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="correct">
+                    <label for="correctaMultiple">
+                        Respuesta correcta
+                    </label>
+
+                    <select id="correctaMultiple"
+                            name="correcta"
+                            required>
+                        <option value="">Selecciona la respuesta correcta</option>
+                        <option value="A">Alternativa A</option>
+                        <option value="B">Alternativa B</option>
+                        <option value="C">Alternativa C</option>
+                        <option value="D">Alternativa D</option>
+                    </select>
+                </div>
+
+            </section>
+
+            <!-- VERDADERO O FALSO -->
+            <section id="seccionVerdaderoFalso"
+                     class="section-type"
+                     hidden>
+
+                <h3>✓ Respuesta verdadera o falsa</h3>
+
+                <p class="help">
+                    Selecciona si el enunciado es verdadero o falso.
+                </p>
+
+                <div class="correct">
+                    <label for="correctaVF">Respuesta correcta</label>
+
+                    <select id="correctaVF"
+                            name="correcta"
+                            required>
+                        <option value="">Selecciona una respuesta</option>
+                        <option value="VERDADERO">Verdadero</option>
+                        <option value="FALSO">Falso</option>
+                    </select>
+                </div>
+
+            </section>
+
+            <!-- COMPLETAR -->
+            <section id="seccionCompletar"
+                     class="section-type"
+                     hidden>
+
+                <h3>✏️ Respuestas aceptadas</h3>
+
+                <p class="help">
+                    Escribe una respuesta correcta por línea.
+                    El sistema aceptará cualquiera de ellas y comparará
+                    ignorando mayúsculas, minúsculas, tildes y espacios
+                    repetidos.
+                </p>
+
+                <div class="field">
+                    <label for="respuestasAceptadas">
+                        Respuestas correctas
+                    </label>
+
+                    <textarea id="respuestasAceptadas"
+                              name="respuestasAceptadas"
+                              placeholder="Primera respuesta correcta&#10;Otra forma válida de responder"
+                              required></textarea>
+                </div>
+
+            </section>
+
+            <!-- DESARROLLO -->
+            <section id="seccionDesarrollo"
+                     class="section-type"
+                     hidden>
+
+                <h3>📖 Pregunta de desarrollo</h3>
+
+                <p class="help">
+                    El estudiante podrá escribir una respuesta libre.
+                    Esta pregunta quedará pendiente para que el profesor
+                    la revise y asigne su calificación.
+                </p>
+
+                <div class="nota">
+                    <span>💡</span>
+                    <p>
+                        Recuerda que las preguntas de desarrollo requieren
+                        revisión manual antes de completar la calificación.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- PUNTAJE -->
+            <div class="puntaje-box">
+                <div class="field" style="margin-bottom:0;">
+                    <label for="puntaje">
+                        Puntaje de la pregunta <span class="required">*</span>
+                    </label>
+
+                    <input type="number"
+                           id="puntaje"
+                           name="puntaje"
+                           min="0.01"
+                           max="100"
+                           step="0.01"
+                           value="5"
+                           required>
+
+                    <small class="field-help">
+                        Define cuántos puntos vale responder correctamente esta pregunta.
+                    </small>
+                </div>
+            </div>
+
+            <button class="save" type="submit">
+                ✓ Guardar pregunta
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+<footer>
+    EduNivel 2.0 · Sistema de seguimiento académico · 2026
+</footer>
+
+<script>
+    const selectorTipo = document.getElementById("tipo");
+
+    const secciones = {
+        OPCION_MULTIPLE: document.getElementById("seccionMultiple"),
+        VERDADERO_FALSO: document.getElementById("seccionVerdaderoFalso"),
+        COMPLETAR: document.getElementById("seccionCompletar"),
+        DESARROLLO: document.getElementById("seccionDesarrollo")
+    };
+
+    function actualizarFormulario() {
+
+        const tipoSeleccionado = selectorTipo.value;
+
+        Object.entries(secciones).forEach(([tipo, seccion]) => {
+
+            const activo = tipo === tipoSeleccionado;
+
+            seccion.hidden = !activo;
+
+            seccion.querySelectorAll("input, select, textarea")
+                .forEach(campo => {
+                    campo.disabled = !activo;
+                });
+        });
+    }
+
+    selectorTipo.addEventListener("change", actualizarFormulario);
+
+    actualizarFormulario();
+</script>
+
+</body>
+</html>

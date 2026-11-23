@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resolver evaluación | EduNivel 2.0</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <style>
+        :root {
+            --fondo: #090d1c;
+            --panel: #141b35;
+            --panel-claro: #202b50;
+            --texto: #f5f3ff;
+            --muted: #a3acc8;
+            --morado: #965cff;
+            --azul: #388bff;
+            --naranja: #ff9d42;
+            --verde: #35d39a;
+            --borde: rgba(255,255,255,.09);
+            --gradiente: linear-gradient(110deg,#965cff,#388bff);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(150,92,255,.13), transparent 28%),
+                radial-gradient(circle at 95% 20%, rgba(56,139,255,.10), transparent 25%),
+                var(--fondo);
+            color: var(--texto);
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(14,20,43,.92);
+            border-bottom: 1px solid var(--borde);
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand {
+            font-family: 'Manrope', sans-serif;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+        }
+
+        .brand span {
+            background: var(--gradiente);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+        }
+
+        main {
+            max-width: 950px;
+            margin: 38px auto;
+            padding: 0 22px;
+        }
+
+        .cabecera-examen {
+            background: linear-gradient(135deg,rgba(150,92,255,.14),rgba(56,139,255,.09)),var(--panel);
+            border: 1px solid var(--borde);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 15px 40px rgba(0,0,0,.16);
+        }
+
+        .etiqueta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #c8adff;
+            background: rgba(150,92,255,.13);
+            border: 1px solid rgba(150,92,255,.22);
+            padding: 7px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .cabecera-examen h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 29px;
+            font-weight: 800;
+            margin-bottom: 17px;
+        }
+
+        .informacion {
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .informacion strong {
+            color: var(--texto);
+        }
+
+        .instruccion {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--borde);
+            color: #c5cce0;
+        }
+
+        .temporizador {
+            position: sticky;
+            top: 10px;
+            z-index: 10;
+            background: rgba(20,27,53,.96);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(150,92,255,.35);
+            color: white;
+            padding: 17px 23px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.24);
+        }
+
+        .temporizador-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .temporizador-info strong {
+            font-size: 14px;
+        }
+
+        .temporizador-info small {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .tiempo {
+            font-family: 'Manrope', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--verde);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .aviso-tiempo {
+            background: rgba(255,157,66,.12);
+            border: 1px solid rgba(255,157,66,.3);
+            color: #ffc17f;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .mensaje {
+            padding: 14px 17px;
+            border-radius: 12px;
+            margin-bottom: 17px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .exito {
+            background: rgba(53,211,154,.12);
+            border: 1px solid rgba(53,211,154,.25);
+            color: #6ee7b7;
+        }
+
+        .error {
+            background: rgba(248,113,113,.12);
+            border: 1px solid rgba(248,113,113,.25);
+            color: #fca5a5;
+        }
+
+        .pregunta {
+            background: var(--panel);
+            border: 1px solid var(--borde);
+            padding: 27px;
+            border-radius: 18px;
+            margin-bottom: 19px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.12);
+            transition: border-color .2s, transform .2s;
+            animation: aparecer .45s ease both;
+        }
+
+        .pregunta:hover {
+            border-color: rgba(150,92,255,.3);
+            transform: translateY(-2px);
+        }
+
+        .pregunta h3 {
+            font-family: 'Manrope', sans-serif;
+            color: #c4a6ff;
+            font-size: 16px;
+            margin-bottom: 17px;
+        }
+
+        .enunciado {
+            color: var(--texto);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            white-space: pre-line;
+        }
+
+        .alternativa {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(255,255,255,.035);
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            cursor: pointer;
+            line-height: 1.6;
+            color: #d9def0;
+            font-size: 14px;
+            transition: all .2s ease;
+        }
+
+        .alternativa:hover {
+            background: rgba(150,92,255,.09);
+            border-color: rgba(150,92,255,.4);
+        }
+
+        .alternativa input {
+            accent-color: var(--morado);
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .alternativa:has(input:checked) {
+            background: rgba(150,92,255,.14);
+            border-color: var(--morado);
+            color: white;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            padding: 15px;
+            background: #0d142b;
+            color: var(--texto);
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            font: inherit;
+            font-size: 14px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        textarea::placeholder {
+            color: #707b9c;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--morado);
+            box-shadow: 0 0 0 3px rgba(150,92,255,.13);
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 19px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
+
+        .guardar {
+            background: var(--gradiente);
+            color: white;
+            margin-top: 17px;
+        }
+
+        .guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(150,92,255,.25);
+        }
+
+        .acciones {
+            text-align: center;
+            background: var(--panel);
+            border: 1px solid var(--borde);
+            padding: 30px;
+            border-radius: 18px;
+            margin-top: 28px;
+        }
+
+        .acciones h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+        .acciones p {
+            color: var(--muted);
+            margin-bottom: 9px;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .finalizar {
+            background: linear-gradient(110deg,#0e9f6e,#16a875);
+            color: white;
+            padding: 15px 27px;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .finalizar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(22,168,117,.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #727e9e;
+            font-size: 12px;
+            border-top: 1px solid var(--borde);
+            margin-top: 55px;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width: 600px) {
+            header {
+                padding: 18px 6%;
+            }
+
+            .brand {
+                font-size: 20px;
+            }
+
+            .header-label {
+                font-size: 9px;
+                text-align: right;
+            }
+
+            main {
+                margin: 22px auto;
+                padding: 0 14px;
+            }
+
+            .cabecera-examen {
+                padding: 22px;
+            }
+
+            .cabecera-examen h2 {
+                font-size: 23px;
+            }
+
+            .temporizador {
+                padding: 14px 16px;
+            }
+
+            .tiempo {
+                font-size: 24px;
+            }
+
+            .pregunta {
+                padding: 21px 17px;
+            }
+
+            .acciones {
+                padding: 24px 17px;
+            }
+
+            .finalizar {
+                width: 100%;
+            }
+        }
+
+        @media(prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">EduNivel <span>2.0</span></div>
+    <div class="header-label">EVALUACIÓN ACADÉMICA</div>
+</header>
+
+<main>
+
+    <section class="cabecera-examen">
+
+        <div class="etiqueta">✦ EVALUACIÓN DIAGNÓSTICA</div>
+
+        <h2 th:text="${examen.area}"></h2>
+
+        <p class="informacion">
+            <strong>Evaluación:</strong>
+            <span th:text="${examen.titulo}"></span>
+        </p>
+
+        <p class="informacion">
+            <strong>Duración:</strong>
+            <span th:text="${examen.duracionMinutos}"></span>
+            minutos
+        </p>
+
+        <p class="informacion">
+            <strong>Preguntas:</strong>
+            <span th:text="${#lists.size(preguntas)}"></span>
+        </p>
+
+        <p class="informacion instruccion">
+            Lee cuidadosamente cada pregunta y guarda tu respuesta antes de continuar.
+        </p>
+
+    </section>
+
+    <div class="temporizador">
+        <div class="temporizador-info">
+            <strong>Tiempo restante</strong>
+            <small>La evaluación finalizará automáticamente al agotarse el tiempo.</small>
+        </div>
+        <span class="tiempo" id="temporizador">45:00</span>
+    </div>
+
+    <div class="aviso-tiempo" id="avisoTiempo">
+        <strong>¡Atención!</strong> Queda menos de un minuto. Guarda tus respuestas.
+    </div>
+
+    <div th:if="${mensajeExito != null}"
+         class="mensaje exito"
+         th:text="${mensajeExito}">
+    </div>
+
+    <div th:if="${mensajeError != null}"
+         class="mensaje error"
+         th:text="${mensajeError}">
+    </div>
+
+    <section th:each="pregunta, iteracion : ${preguntas}"
+             class="pregunta">
+
+        <h3>
+            Pregunta
+            <span th:text="${iteracion.count}"></span>
+        </h3>
+
+        <p class="enunciado"
+           th:text="${pregunta.enunciado}">
+        </p>
+
+        <form method="post"
+              th:action="@{/estudiante/examen/{id}/respuesta(id=${intento.id})}">
+
+            <input type="hidden"
+                   name="preguntaId"
+                   th:value="${pregunta.id}">
+
+            <div th:if="${pregunta.tipo == 'OPCION_MULTIPLE' or pregunta.tipo == 'VERDADERO_FALSO'}">
+
+                <label class="alternativa"
+                       th:each="opcion : ${pregunta.opciones}">
+
+                    <input type="radio"
+                           name="opcionId"
+                           th:value="${opcion.id}"
+                           th:checked="${pregunta.opcionSeleccionadaId != null and pregunta.opcionSeleccionadaId == opcion.id}"
+                           required>
+
+                    <span th:text="${opcion.textoOpcion}"></span>
+
+                </label>
+
+            </div>
+
+            <div th:if="${pregunta.tipo == 'COMPLETAR' or pregunta.tipo == 'DESARROLLO'}">
+
+                <textarea name="respuestaTexto"
+                          placeholder="Escribe tu respuesta aquí..."
+                          th:text="${pregunta.respuestaTexto}"
+                          required></textarea>
+
+            </div>
+
+            <button type="submit" class="guardar">
+                Guardar respuesta
+            </button>
+
+        </form>
+
+    </section>
+
+    <section class="acciones">
+
+        <h3>¿Terminaste de responder?</h3>
+
+        <p>
+            Comprueba que hayas guardado tus respuestas antes de finalizar.
+        </p>
+
+        <p>
+            Una vez finalizada, ya no podrás modificar tus respuestas.
+        </p>
+
+        <form method="post"
+              id="formFinalizar"
+              th:action="@{/estudiante/examen/{id}/finalizar(id=${intento.id})}">
+
+            <button type="submit"
+                    class="finalizar"
+                    onclick="return confirm('¿Estás seguro de finalizar la evaluación? Ya no podrás modificar tus respuestas.');">
+
+                Finalizar evaluación
+
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+<footer>
+    EduNivel 2.0 · Sistema de seguimiento académico · 2026
+</footer>
+
+<script th:inline="javascript">
+
+    const fechaLimite = /*[[${fechaLimiteEpoch}]]*/ 0;
+
+    const reloj = document.getElementById("temporizador");
+    const aviso = document.getElementById("avisoTiempo");
+    const formularioFinalizar = document.getElementById("formFinalizar");
+
+    let finalizadoAutomaticamente = false;
+
+    function actualizarTemporizador() {
+
+        const ahora = Date.now();
+        const diferencia = Math.max(0, fechaLimite - ahora);
+
+        const minutos = Math.floor(diferencia / 60000);
+        const segundos = Math.floor((diferencia % 60000) / 1000);
+
+        reloj.textContent =
+            String(minutos).padStart(2, "0") + ":" +
+            String(segundos).padStart(2, "0");
+
+        if (diferencia <= 60000 && diferencia > 0) {
+            aviso.style.display = "block";
+            reloj.style.color = "#ff9d42";
+        }
+
+        if (diferencia <= 0 && !finalizadoAutomaticamente) {
+
+            finalizadoAutomaticamente = true;
+
+            reloj.textContent = "00:00";
+
+            formularioFinalizar.submit();
+        }
+    }
+
+    actualizarTemporizador();
+
+    setInterval(actualizarTemporizador, 1000);
+
+</script>
+
+</body>
+</html>

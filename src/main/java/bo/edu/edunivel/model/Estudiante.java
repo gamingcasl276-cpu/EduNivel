@@ -1,6 +1,13 @@
 package bo.edu.edunivel.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -23,7 +30,15 @@ public class Estudiante {
 
     @Column(nullable = false, length = 10)
     private String gestion = "2026";
-
+   
+    @OneToOne(mappedBy = "estudiante", fetch = FetchType.LAZY)
+    private Usuario usuario;
+    public Usuario getUsuario() {
+    return usuario;
+    }
+    public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+    }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getCodigo() { return codigo; }

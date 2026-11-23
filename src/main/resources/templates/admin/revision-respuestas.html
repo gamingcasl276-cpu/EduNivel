@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Revisión de respuestas | EduNivel</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f4f7fc;
+            color: #17233c;
+        }
+
+        .contenedor {
+            width: min(1150px, 92%);
+            margin: 40px auto;
+        }
+
+        .encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        h1, h2 {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .subtitulo {
+            color: #718096;
+        }
+
+        .boton-volver {
+            text-decoration: none;
+            background: #e8eef9;
+            color: #2454a6;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .resumen {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 5px 20px rgba(30, 60, 100, .05);
+        }
+
+        .resumen strong {
+            font-size: 30px;
+            color: #2454a6;
+            display: block;
+        }
+
+        .resumen span {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .mensaje {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+        }
+
+        .exito {
+            background: #e5f8ee;
+            color: #167344;
+        }
+
+        .error {
+            background: #fdecec;
+            color: #b42318;
+        }
+
+        .lista {
+            display: grid;
+            gap: 16px;
+        }
+
+        .tarjeta {
+            background: white;
+            padding: 23px;
+            border-radius: 16px;
+            border: 1px solid #e8edf5;
+            box-shadow: 0 5px 20px rgba(30, 60, 100, .04);
+        }
+
+        .tarjeta-superior {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .materia {
+            color: #2454a6;
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .estado {
+            background: #fff4dc;
+            color: #a66a00;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .datos {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .dato small {
+            display: block;
+            color: #8793a6;
+            margin-bottom: 4px;
+        }
+
+        .dato strong {
+            font-size: 14px;
+        }
+
+        .pregunta {
+            background: #f6f8fc;
+            padding: 16px;
+            border-radius: 11px;
+            margin-bottom: 14px;
+        }
+
+        .pregunta small {
+            display: block;
+            color: #718096;
+            margin-bottom: 7px;
+        }
+
+        .respuesta {
+            color: #40516c;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .pie-tarjeta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .puntaje {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .boton-revisar {
+            background: #2454a6;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .boton-revisar:hover {
+            background: #183d7d;
+        }
+
+        .vacio {
+            background: white;
+            padding: 55px 20px;
+            text-align: center;
+            border-radius: 16px;
+        }
+
+        .vacio h2 {
+            margin-bottom: 10px;
+        }
+
+        .vacio p {
+            color: #718096;
+        }
+
+        @media(max-width: 600px) {
+            .contenedor {
+                margin: 25px auto;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+
+            .datos {
+                grid-template-columns: 1fr;
+            }
+
+            .boton-revisar {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+<link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <header class="encabezado">
+        <div>
+            <h1>Revisión de respuestas</h1>
+            <p class="subtitulo">
+                Evalúa las respuestas de desarrollo de tus estudiantes.
+            </p>
+        </div>
+
+        <a th:href="@{/admin}" class="boton-volver">
+            Volver al panel
+        </a>
+    </header>
+
+    <div th:if="${mensaje}" class="mensaje exito"
+         th:text="${mensaje}"></div>
+
+    <div th:if="${error}" class="mensaje error"
+         th:text="${error}"></div>
+
+    <section class="resumen">
+        <strong th:text="${#lists.size(respuestas)}">0</strong>
+        <span>Respuestas pendientes de revisión</span>
+    </section>
+
+    <section class="lista"
+             th:if="${!#lists.isEmpty(respuestas)}">
+
+        <article class="tarjeta"
+                 th:each="respuesta : ${respuestas}">
+
+            <div class="tarjeta-superior">
+                <span class="materia"
+                      th:text="${respuesta.pregunta.area}">
+                    Materia
+                </span>
+
+                <span class="estado">
+                    Pendiente de revisión
+                </span>
+            </div>
+
+            <div class="datos">
+                <div class="dato">
+                    <small>Estudiante</small>
+                    <strong
+                        th:text="${respuesta.intento.estudiante.usuario.nombreUsuario}">
+                        Estudiante
+                    </strong>
+                </div>
+
+                <div class="dato">
+                    <small>Curso</small>
+                    <strong
+                        th:text="${respuesta.intento.examen.curso}">
+                        Curso
+                    </strong>
+                </div>
+            </div>
+
+            <div class="pregunta">
+                <small>Pregunta</small>
+                <p th:text="${respuesta.pregunta.enunciado}"></p>
+            </div>
+
+            <div class="pregunta">
+                <small>Respuesta del estudiante</small>
+                <p class="respuesta"
+                   th:text="${respuesta.respuestaTexto}">
+                </p>
+            </div>
+
+            <div class="pie-tarjeta">
+                <span class="puntaje">
+                    Puntaje máximo:
+                    <strong
+                        th:text="${respuesta.pregunta.puntaje}">
+                        0
+                    </strong>
+                    puntos
+                </span>
+
+                <a class="boton-revisar"
+                   th:href="@{/admin/revision/{id}(id=${respuesta.id})}">
+                    Revisar respuesta
+                </a>
+            </div>
+
+        </article>
+
+    </section>
+
+    <section class="vacio"
+             th:if="${#lists.isEmpty(respuestas)}">
+
+        <h2>¡Todo al día!</h2>
+
+        <p>
+            No hay respuestas pendientes de revisión por el momento.
+        </p>
+
+    </section>
+
+</div>
+
+</body>
+</html>
+

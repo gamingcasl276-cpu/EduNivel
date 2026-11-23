@@ -1,152 +1,474 @@
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101b3d">
-  <meta name="description" content="EduNivel: aprende, practica y descubre tus fortalezas para tu futuro académico.">
-  <title>EduNivel | Aprende jugando</title>
-  <link rel="stylesheet" href="/css/edunivel.css">
-  <script defer src="/js/edunivel.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10101e">
+    <meta name="description" content="EduNivel 2.0: plataforma de evaluación y seguimiento académico.">
+
+    <title>EduNivel 2.0 | Tu siguiente nivel</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="stylesheet" href="/css/edunivel.css">
+    <link rel="stylesheet" th:href="@{/css/edunivel-global.css}">
+
+    <script defer src="/js/edunivel.js"></script>
 </head>
+
 <body>
-  <div class="app-shell">
+
+<div class="app-shell">
+
+    <!-- BARRA LATERAL -->
+
     <aside class="sidebar" id="sidebar">
-      <a class="brand" href="#inicio" data-page="inicio">
-        <span class="brand-mark">E<span>+</span></span>
-        <span><strong>EduNivel</strong><small>Tu siguiente nivel</small></span>
-      </a>
-      <div class="side-label">PLATAFORMA</div>
-      <nav class="side-nav" aria-label="Navegación principal">
-        <button class="nav-link active" data-page="inicio"><span>⌂</span> Inicio</button>
-        <button class="nav-link" data-page="evaluaciones"><span>▤</span> Evaluaciones</button>
-        <button class="nav-link" data-page="repaso"><span>✦</span> Estudia y repasa</button>
-        <button class="nav-link" data-page="juegos"><span>♧</span> Zona de juegos</button>
-        <button class="nav-link" data-page="carrera"><span>◎</span> Análisis CARRERA</button>
-        <button class="nav-link" data-page="progreso"><span>↗</span> Mi progreso</button>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="side-label">EDUNIVEL</div>
-        <button class="nav-link" data-page="nosotros"><span>ⓘ</span> Quiénes somos</button>
-        <div class="sidebar-note"><span class="spark">✦</span><strong>Un paso a la vez.</strong><p>Tu futuro se construye aprendiendo.</p></div>
-      </div>
+
+        <a class="brand" href="#inicio" data-page="inicio">
+            <span class="brand-mark">E<span>+</span></span>
+            <span>
+                <strong>EduNivel <span style="color:#a78bfa">2.0</span></strong>
+                <small>Tu siguiente nivel</small>
+            </span>
+        </a>
+
+        <div class="side-label">PLATAFORMA</div>
+
+        <nav class="side-nav" aria-label="Navegación principal">
+
+            <button class="nav-link active" data-page="inicio">
+                <span>⌂</span> Inicio
+            </button>
+
+            <a class="nav-link" href="/estudiante">
+                <span>▤</span> Evaluaciones
+            </a>
+
+            <a class="nav-link" href="/estudiante">
+                <span>↗</span> Mi progreso
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="side-label">EDUNIVEL</div>
+
+            <button class="nav-link" data-page="nosotros">
+                <span>ⓘ</span> Quiénes somos
+            </button>
+
+            <div class="sidebar-note">
+                <span class="spark">✦</span>
+                <strong>Tu esfuerzo cuenta.</strong>
+                <p>Cada pequeño avance te acerca a tus metas.</p>
+            </div>
+
+        </div>
+
     </aside>
 
+
+    <!-- CONTENIDO PRINCIPAL -->
+
     <main class="main-area">
-      <header class="topbar">
-        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menú">☰</button>
-        <div class="crumb">Plataforma <span>/</span> <strong id="pageCrumb">Inicio</strong></div>
-        <div class="top-actions">
-          <span class="status-dot"></span><span class="status-text">Modo estudiante</span>
-          <div class="avatar">E</div>
-        </div>
-      </header>
 
-      <section class="page active" id="page-inicio">
-        <div class="welcome-banner">
-          <div class="welcome-copy">
-            <span class="eyebrow light">BIENVENIDO A EDUNIVEL</span>
-            <h1>¡Tu aprendizaje<br>sube de nivel! <span>🚀</span></h1>
-            <p>Explora tus habilidades, practica a tu ritmo y prepárate para el siguiente paso de tu formación.</p>
-            <button class="btn btn-white" data-go="repaso">Comenzar a aprender <span>→</span></button>
-          </div>
-          <div class="banner-art" aria-hidden="true">
-            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-            <div class="big-star">✦</div><div class="book-emoji">📚</div>
-            <div class="floating f1">+20 XP</div><div class="floating f2">¡Sigue así!</div>
-          </div>
-        </div>
+        <header class="topbar">
 
-        <div class="section-heading">
-          <div><span class="eyebrow">TU ESPACIO DE APRENDIZAJE</span><h2>¿Qué quieres hacer hoy?</h2></div>
-          <span class="date-chip">✦ Aprende a tu ritmo</span>
-        </div>
-        <div class="feature-grid">
-          <button class="feature-card purple" data-go="evaluaciones"><span class="feature-icon">📝</span><span class="feature-tag">CONOCE TU NIVEL</span><strong>Evaluaciones</strong><small>Comprueba lo que sabes en cada área.</small><span class="card-arrow">↗</span></button>
-          <button class="feature-card mint" data-go="repaso"><span class="feature-icon">🧠</span><span class="feature-tag">REFUERZA</span><strong>Estudia y repasa</strong><small>Aprende con tarjetas y retos rápidos.</small><span class="card-arrow">↗</span></button>
-          <button class="feature-card peach" data-go="juegos"><span class="feature-icon">🎮</span><span class="feature-tag">DIVIÉRTETE</span><strong>Zona de juegos</strong><small>Gana puntos mientras practicas.</small><span class="card-arrow">↗</span></button>
-          <button class="feature-card blue" data-go="carrera"><span class="feature-icon">🧭</span><span class="feature-tag">MIRA AL FUTURO</span><strong>Análisis CARRERA</strong><small>Explora áreas y opciones profesionales.</small><span class="card-arrow">↗</span></button>
-        </div>
+            <button
+                class="mobile-menu"
+                id="mobileMenu"
+                aria-label="Abrir menú">
+                ☰
+            </button>
 
-        <div class="section-heading compact"><div><span class="eyebrow">LAS ÁREAS QUE EXPLORAMOS</span><h2>Cuatro caminos para crecer</h2></div></div>
-        <div class="subject-grid">
-          <div class="subject-card"><span class="subject-icon math">∑</span><div><strong>Matemática</strong><small>Problemas y pensamiento cuantitativo</small></div><span class="subject-level">01</span></div>
-          <div class="subject-card"><span class="subject-icon read">Aa</span><div><strong>Comprensión lectora</strong><small>Interpretar, comprender y comunicar</small></div><span class="subject-level">02</span></div>
-          <div class="subject-card"><span class="subject-icon logic">◇</span><div><strong>Razonamiento lógico</strong><small>Patrones, análisis y resolución</small></div><span class="subject-level">03</span></div>
-          <div class="subject-card"><span class="subject-icon digital">⌘</span><div><strong>Competencias digitales</strong><small>Herramientas y ciudadanía digital</small></div><span class="subject-level">04</span></div>
-        </div>
-        <div class="notice"><span>💡</span><p><strong>Recuerda:</strong> EduNivel es una herramienta educativa de orientación y refuerzo. Sus actividades no reemplazan las evaluaciones oficiales ni determinan por sí solas tu futuro profesional.</p></div>
-      </section>
+            <div class="crumb">
+                EduNivel
+                <span>/</span>
+                <strong id="pageCrumb">Inicio</strong>
+            </div>
 
-      <section class="page" id="page-nosotros">
-        <div class="page-intro"><span class="eyebrow">CONÓCENOS</span><h1>Aprender también es descubrir quién puedes llegar a ser.</h1><p>EduNivel es una propuesta tecnológica educativa que organiza información académica y promueve el aprendizaje mediante actividades de práctica y reflexión.</p></div>
-        <div class="about-grid">
-          <article class="about-panel dark-panel"><span class="panel-icon">🎯</span><h2>¿Qué hacemos?</h2><p>Recopilamos y organizamos información de evaluaciones diagnósticas en Matemática, Comprensión Lectora, Razonamiento Lógico y Competencias Digitales para observar fortalezas y necesidades generales de refuerzo.</p></article>
-          <article class="about-panel"><span class="panel-icon">🌱</span><h2>Nuestro propósito</h2><p>Apoyar la preparación académica de estudiantes que están por concluir la secundaria, ofreciendo recursos de práctica, reflexión y orientación para su siguiente etapa educativa.</p></article>
-        </div>
-        <div class="info-strip"><div><small>CONTEXTO DEL PROYECTO</small><strong>Unidad Educativa Franz Tamayo N.º 3</strong></div><div><small>ENFOQUE</small><strong>Educativo y preventivo</strong></div><div><small>ÁREAS</small><strong>4 competencias</strong></div></div>
-        <div class="notice"><span>🔒</span><p>La información de estudiantes debe manejarse con responsabilidad. Esta interfaz no publica nombres ni resultados individuales.</p></div>
-      </section>
+            <div class="top-actions">
+                <span class="status-dot"></span>
+                <span class="status-text">Modo estudiante</span>
+                <div class="avatar">E</div>
+            </div>
 
-      <section class="page" id="page-evaluaciones">
-        <div class="page-intro"><span class="eyebrow">EVALUACIÓN Y AUTOCONOCIMIENTO</span><h1>Comprueba lo que sabes.</h1><p>Responde pequeñas preguntas de práctica. Los resultados de esta demostración son orientativos y no son calificaciones oficiales.</p></div>
-        <div class="assessment-layout">
-          <div class="assessment-list">
-            <button class="assessment-option selected" data-quiz="math"><span class="subject-icon math">∑</span><span><strong>Matemática</strong><small>Operaciones y resolución de problemas</small></span><b>→</b></button>
-            <button class="assessment-option" data-quiz="reading"><span class="subject-icon read">Aa</span><span><strong>Comprensión lectora</strong><small>Lectura e interpretación</small></span><b>→</b></button>
-            <button class="assessment-option" data-quiz="logic"><span class="subject-icon logic">◇</span><span><strong>Razonamiento lógico</strong><small>Secuencias y patrones</small></span><b>→</b></button>
-            <button class="assessment-option" data-quiz="digital"><span class="subject-icon digital">⌘</span><span><strong>Competencias digitales</strong><small>Uso responsable de tecnología</small></span><b>→</b></button>
-          </div>
-          <div class="quiz-panel" id="quizPanel">
-            <div class="quiz-top"><span class="pill">PRÁCTICA DEMOSTRATIVA</span><span id="quizCounter">Pregunta 1 de 3</span></div>
-            <div class="progress-track"><div class="progress-fill" id="quizProgress" style="width:33%"></div></div>
-            <h2 id="quizQuestion">¿Cuánto es 15 × 4?</h2>
-            <div class="answer-list" id="answerList"></div>
-            <div class="quiz-footer"><span id="quizFeedback">Selecciona una respuesta para continuar.</span><button class="btn btn-primary" id="nextQuestion" disabled>Siguiente →</button></div>
-          </div>
-        </div>
-      </section>
+        </header>
 
-      <section class="page" id="page-repaso">
-        <div class="page-intro"><span class="eyebrow">APRENDE A TU RITMO</span><h1>Pequeños repasos, grandes avances.</h1><p>Usa las tarjetas para recordar conceptos y comprobar cuánto has aprendido.</p></div>
-        <div class="study-layout">
-          <div class="study-card-wrap"><div class="flashcard" id="flashcard"><span class="pill">TARJETA DE REPASO</span><div class="flash-symbol">✦</div><h2 id="flashQuestion">¿Qué es una variable en programación?</h2><p id="flashAnswer" class="hidden-answer">Es un espacio identificado por un nombre donde se almacena un dato que puede utilizarse durante la ejecución de un programa.</p><small id="flashHint">Piensa en un espacio donde guardas información.</small></div><div class="flash-actions"><button class="btn btn-outline" id="flipCard">Mostrar respuesta</button><button class="btn btn-primary" id="nextCard">Otra tarjeta ↗</button></div></div>
-          <div class="study-aside"><span class="eyebrow">TÉCNICAS DE ESTUDIO</span><h2>Prueba una dinámica</h2><div class="tip-item"><span>⏱️</span><div><strong>Pomodoro</strong><p>Estudia 25 minutos y descansa 5.</p></div></div><div class="tip-item"><span>🗣️</span><div><strong>Explica en voz alta</strong><p>Resume el tema como si enseñaras a alguien.</p></div></div><div class="tip-item"><span>🗂️</span><div><strong>Recuerdo activo</strong><p>Intenta responder sin mirar tus apuntes.</p></div></div></div>
-        </div>
-      </section>
 
-      <section class="page" id="page-juegos">
-        <div class="page-intro"><span class="eyebrow">APRENDER JUGANDO</span><h1>¡Acepta el desafío!</h1><p>Resuelve retos cortos, acumula puntos de práctica y mejora tus habilidades.</p></div>
-        <div class="game-grid">
-          <article class="game-card game-purple"><div class="game-art">🔢</div><span class="pill">MATEMÁTICA</span><h2>Reto relámpago</h2><p>Resuelve una operación antes de que se acabe tu paciencia.</p><button class="btn btn-primary" data-game="math">Jugar ahora →</button></article>
-          <article class="game-card game-green"><div class="game-art">🔍</div><span class="pill">LÓGICA</span><h2>Encuentra el patrón</h2><p>Descubre qué número continúa la secuencia.</p><button class="btn btn-primary" data-game="pattern">Jugar ahora →</button></article>
-          <article class="game-card game-orange"><div class="game-art">📖</div><span class="pill">LECTURA</span><h2>Detective de ideas</h2><p>Identifica la idea principal de una oración.</p><button class="btn btn-primary" data-game="reading">Jugar ahora →</button></article>
-          <article class="game-card game-blue"><div class="game-art">💻</div><span class="pill">DIGITAL</span><h2>Misión digital</h2><p>Elige la acción más segura en internet.</p><button class="btn btn-primary" data-game="digital">Jugar ahora →</button></article>
-        </div>
-        <div class="game-stage hidden" id="gameStage"><div class="game-stage-head"><span class="pill">RETO ACTIVO</span><button class="text-button" id="closeGame">Cerrar ✕</button></div><h2 id="gamePrompt">Pregunta</h2><div id="gameChoices" class="answer-list"></div><p id="gameResult" aria-live="polite"></p></div>
-      </section>
+        <!-- INICIO -->
 
-      <section class="page" id="page-carrera">
-        <div class="page-intro"><span class="eyebrow">ORIENTACIÓN PARA TU FUTURO</span><h1>Análisis CARRERA 🧭</h1><p>Responde según tus intereses y actividades favoritas. Recibirás áreas de estudio que podrías explorar, no una decisión definitiva.</p></div>
-        <div class="career-box">
-          <div class="career-progress"><span id="careerStep">PASO 1 DE 4</span><div class="progress-track"><div class="progress-fill" id="careerBar" style="width:25%"></div></div></div>
-          <h2 id="careerQuestion">¿Qué actividad disfrutas más?</h2>
-          <div class="career-options" id="careerOptions"></div>
-          <div class="career-footer"><span id="careerHint">No hay respuestas correctas o incorrectas.</span><button class="btn btn-primary" id="careerNext" disabled>Siguiente →</button></div>
-          <div id="careerResult" class="career-result hidden"></div>
-        </div>
-        <p class="fine-print">La orientación se basa únicamente en tus respuestas a este cuestionario breve. Para elegir una carrera, también considera tus intereses, contexto, plan de estudios, costos, requisitos y conversa con orientadores o profesionales.</p>
-      </section>
+        <section class="page active" id="page-inicio">
 
-      <section class="page" id="page-progreso">
-        <div class="page-intro"><span class="eyebrow">TU CAMINO</span><h1>Tu progreso de aprendizaje.</h1><p>Esta vista muestra únicamente los puntos de práctica acumulados en esta demostración.</p></div>
-        <div class="stats-grid"><div class="stat-card"><span>⭐</span><small>PUNTOS DE PRÁCTICA</small><strong id="totalXP">0 XP</strong></div><div class="stat-card"><span>🎯</span><small>RETOS COMPLETADOS</small><strong id="totalWins">0</strong></div><div class="stat-card"><span>📚</span><small>TARJETAS VISTAS</small><strong id="cardsSeen">0</strong></div></div>
-        <div class="progress-message"><span>🌟</span><div><h2>La constancia vale más que la velocidad.</h2><p>Vuelve cada día, practica un poco y celebra tus avances.</p></div></div>
-        <div class="notice"><span>ℹ️</span><p>Los datos de esta versión inicial se guardan solo en este navegador como demostración. Todavía no se sincronizan con la base de datos MySQL.</p></div>
-      </section>
+            <div class="welcome-banner">
 
-      <footer class="footer"><span>© EduNivel · Plataforma educativa</span><span>Aprende · Practica · Descubre</span></footer>
+                <div class="welcome-copy">
+
+                    <span class="eyebrow light">
+                        BIENVENIDO A EDUNIVEL 2.0
+                    </span>
+
+                    <h1>
+                        ¡Es momento de<br>
+                        superar tus límites!
+                        <span>🚀</span>
+                    </h1>
+
+                    <p>
+                        Aprende, demuestra tus conocimientos y
+                        descubre tus fortalezas académicas.
+                        Prepárate para alcanzar tus metas y construir
+                        tu futuro paso a paso.
+                    </p>
+
+                    <a class="btn btn-white" href="/estudiante">
+                        Ir a mis evaluaciones
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+                <div class="banner-art" aria-hidden="true">
+
+                    <div class="orbit orbit-one"></div>
+                    <div class="orbit orbit-two"></div>
+
+                    <div class="big-star">✦</div>
+                    <div class="book-emoji">📚</div>
+
+                    <div class="floating f1">6to secundaria</div>
+                    <div class="floating f2">¡Tú puedes!</div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCESOS PRINCIPALES -->
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        TU ESPACIO ACADÉMICO
+                    </span>
+
+                    <h2>¿Qué quieres hacer hoy?</h2>
+                </div>
+
+                <span class="date-chip">
+                    ✦ Aprende a tu ritmo
+                </span>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+                <a class="feature-card purple" href="/estudiante">
+
+                    <span class="feature-icon">📝</span>
+                    <span class="feature-tag">CONOCE TU NIVEL</span>
+
+                    <strong>Evaluaciones</strong>
+
+                    <small>
+                        Accede a tus evaluaciones académicas
+                        y demuestra tus conocimientos.
+                    </small>
+
+                    <span class="card-arrow">↗</span>
+
+                </a>
+
+
+                <a class="feature-card mint" href="/estudiante">
+
+                    <span class="feature-icon">📊</span>
+                    <span class="feature-tag">CONSULTA TUS RESULTADOS</span>
+
+                    <strong>Mi progreso</strong>
+
+                    <small>
+                        Consulta tus resultados, calificaciones
+                        y rendimiento académico.
+                    </small>
+
+                    <span class="card-arrow">↗</span>
+
+                </a>
+
+            </div>
+
+
+            <!-- ÁREAS ACADÉMICAS -->
+
+            <div class="section-heading compact">
+
+                <div>
+                    <span class="eyebrow">
+                        TU FORMACIÓN ACADÉMICA
+                    </span>
+
+                    <h2>Las cuatro áreas de evaluación</h2>
+                </div>
+
+            </div>
+
+
+            <div class="subject-grid">
+
+                <div class="subject-card">
+
+                    <span class="subject-icon math">∑</span>
+
+                    <div>
+                        <strong>Matemáticas</strong>
+                        <small>
+                            Números, operaciones y resolución de problemas
+                        </small>
+                    </div>
+
+                    <span class="subject-level">01</span>
+
+                </div>
+
+
+                <div class="subject-card">
+
+                    <span class="subject-icon read">Aa</span>
+
+                    <div>
+                        <strong>Comprensión lectora</strong>
+                        <small>
+                            Interpretación, análisis y comprensión de textos
+                        </small>
+                    </div>
+
+                    <span class="subject-level">02</span>
+
+                </div>
+
+
+                <div class="subject-card">
+
+                    <span class="subject-icon logic">◇</span>
+
+                    <div>
+                        <strong>Razonamiento lógico</strong>
+                        <small>
+                            Patrones, pensamiento y resolución lógica
+                        </small>
+                    </div>
+
+                    <span class="subject-level">03</span>
+
+                </div>
+
+
+                <div class="subject-card">
+
+                    <span class="subject-icon digital">✎</span>
+
+                    <div>
+                        <strong>Lenguaje</strong>
+                        <small>
+                            Comunicación, gramática y expresión escrita
+                        </small>
+                    </div>
+
+                    <span class="subject-level">04</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="notice">
+
+                <span>💡</span>
+
+                <p>
+                    <strong>Recuerda:</strong>
+                    EduNivel es una herramienta de evaluación
+                    y seguimiento académico. Cada evaluación
+                    representa una oportunidad para reconocer
+                    tus fortalezas y mejorar tus conocimientos.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUIÉNES SOMOS -->
+
+        <section class="page" id="page-nosotros">
+
+            <div class="page-intro">
+
+                <span class="eyebrow">CONÓCENOS</span>
+
+                <h1>
+                    Aprender también es descubrir
+                    quién puedes llegar a ser.
+                </h1>
+
+                <p>
+                    EduNivel 2.0 es una plataforma tecnológica educativa
+                    que busca fortalecer el aprendizaje, evaluar
+                    conocimientos y acompañar el desarrollo académico
+                    de los estudiantes.
+                </p>
+
+            </div>
+
+
+            <div class="about-grid">
+
+                <article class="about-panel dark-panel">
+
+                    <span class="panel-icon">🎯</span>
+
+                    <h2>¿Qué hacemos?</h2>
+
+                    <p>
+                        Ofrecemos herramientas para evaluar conocimientos
+                        en Matemáticas, Comprensión lectora,
+                        Razonamiento lógico y Lenguaje.
+                        Organizamos los resultados para identificar
+                        fortalezas y aspectos que necesitan refuerzo.
+                    </p>
+
+                </article>
+
+
+                <article class="about-panel">
+
+                    <span class="panel-icon">🌱</span>
+
+                    <h2>Nuestro propósito</h2>
+
+                    <p>
+                        Promover el desarrollo académico mediante
+                        evaluaciones y herramientas de seguimiento
+                        que ayuden a los estudiantes a prepararse
+                        para sus siguientes desafíos.
+                    </p>
+
+                </article>
+
+            </div>
+
+
+            <div class="info-strip">
+
+                <div>
+                    <small>NIVEL ACADÉMICO</small>
+                    <strong>6to de secundaria</strong>
+                </div>
+
+                <div>
+                    <small>GESTIÓN</small>
+                    <strong>2026</strong>
+                </div>
+
+                <div>
+                    <small>ÁREAS DE EVALUACIÓN</small>
+                    <strong>4 materias</strong>
+                </div>
+
+            </div>
+
+
+            <div class="notice">
+
+                <span>🔒</span>
+
+                <p>
+                    <strong>Privacidad y responsabilidad:</strong>
+                    La información académica de los estudiantes debe
+                    manejarse de forma responsable y utilizarse
+                    únicamente para los fines educativos correspondientes.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- EVALUACIONES -->
+
+        <section class="page" id="page-evaluaciones">
+
+            <div class="page-intro">
+
+                <span class="eyebrow">
+                    EVALUACIÓN ACADÉMICA
+                </span>
+
+                <h1>Comprueba lo que sabes.</h1>
+
+                <p>
+                    Accede a las evaluaciones oficiales disponibles
+                    para tu curso y consulta tus resultados académicos.
+                </p>
+
+                <a class="btn btn-primary" href="/estudiante">
+                    Ir a mis evaluaciones →
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- MI PROGRESO -->
+
+        <section class="page" id="page-progreso">
+
+            <div class="page-intro">
+
+                <span class="eyebrow">TU CAMINO ACADÉMICO</span>
+
+                <h1>Tu progreso de aprendizaje.</h1>
+
+                <p>
+                    Consulta tus evaluaciones realizadas,
+                    calificaciones y rendimiento académico
+                    desde tu panel de estudiante.
+                </p>
+
+                <a class="btn btn-primary" href="/estudiante">
+                    Consultar mi progreso →
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- PIE DE PÁGINA -->
+
+        <footer class="footer">
+
+            <span>
+                © 2026 EduNivel 2.0 · Plataforma educativa
+            </span>
+
+            <span>
+                Aprende · Evalúa · Progresa
+            </span>
+
+        </footer>
+
     </main>
-  </div>
+
+</div>
+
 </body>
 </html>
